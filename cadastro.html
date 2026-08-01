@@ -160,18 +160,19 @@ async function sincronizarCadastros(){
 
   for(const cadastro of pendentes){
     try{
-      const resposta = await fetch(API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(cadastro)
-      });
+ try{
+  await fetch(API_URL, {
+    method: "POST",
+    mode: "no-cors",
+    headers: {
+      "Content-Type": "text/plain;charset=utf-8"
+    },
+    body: JSON.stringify(cadastro)
+  });
 
-      if(!resposta.ok){
-        restantes.push(cadastro);
-      }
-    }catch(e){
-      restantes.push(cadastro);
-    }
+}catch(e){
+  restantes.push(cadastro);
+}
   }
 
   setPendentes(restantes);
