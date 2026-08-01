@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Novo Cadastro - Artigo Um</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+
+body{
+  font-family:Arial, Helvetica, sans-serif;
+  background:#f4f6f9;
+  padding:20px;
+}
+
+.container{
+  max-width:700px;
+  margin:0 auto;
+  background:#fff;
+  padding:25px;
+  border-radius:18px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.1);
+}
+
+h1{
+  text-align:center;
+  color:#0B1F3A;
+  margin-bottom:8px;
+}
+
+.subtitle{
+  text-align:center;
+  color:#666;
+  margin-bottom:25px;
+}
+
+.section{
+  margin-top:24px;
+  margin-bottom:12px;
+  color:#0B1F3A;
+  font-size:18px;
+  font-weight:bold;
+}
+
+label{
+  display:block;
+  margin-top:14px;
+  margin-bottom:6px;
+  color:#333;
+  font-weight:bold;
+}
+
+input, select, textarea{
+  width:100%;
+  padding:14px;
+  border:1px solid #ccc;
+  border-radius:10px;
+  font-size:16px;
+}
+
+.checkbox{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  margin-top:18px;
+}
+
+.checkbox input{
+  width:auto;
+  margin-top:3px;
+}
+
+button{
+  width:100%;
+  padding:16px;
+  margin-top:24px;
+  background:#7ED957;
+  color:#fff;
+  border:none;
+  border-radius:10px;
+  font-size:18px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+button:hover{
+  background:#69c548;
+}
+
+.status{
+  margin-top:18px;
+  text-align:center;
+  font-weight:bold;
+  color:#0B1F3A;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Artigo Um</h1>
+<div class="subtitle">Novo Cadastro</div>
+
+<form id="cadastroForm">
+
+<div class="section">Dados Pessoais</div>
+
+<label>Nome completo (conforme consta no Título de Eleitor) *</label>
+<input type="text" id="nome" required>
+
+<label>Número do Título de Eleitor</label>
+<input type="text" id="titulo">
+
+<label>Zona Eleitoral</label>
+<input type="text" id="zona">
+
+<label>Seção Eleitoral</label>
+<input type="text" id="secao">
+
+<label>CPF</label>
+<input type="text" id="cpf">
+
+<label>Data de nascimento *</label>
+<input type="date" id="nascimento" required>
+
+<label>Nome da mãe *</label>
+<input type="text" id="mae" required>
+
+<label>Nome do pai</label>
+<input type="text" id="pai">
+
+<label>Estado civil</label>
+<select id="estadoCivil">
+<option value="">Selecione</option>
+<option>Solteiro(a)</option>
+<option>Casado(a)</option>
+<option>União Estável</option>
+<option>Divorciado(a)</option>
+<option>Viúvo(a)</option>
+</select>
+
+<label>Gênero</label>
+<select id="genero">
+<option value="">Selecione</option>
+<option>Masculino</option>
+<option>Feminino</option>
+<option>Outro</option>
+<option>Prefiro não informar</option>
+</select>
+
+<div class="section">Endereço</div>
+
+<label>CEP</label>
+<input type="text" id="cep">
+
+<label>Endereço completo (logradouro) *</label>
+<input type="text" id="endereco" required>
+
+<label>Número *</label>
+<input type="text" id="numero" required>
+
+<label>Complemento</label>
+<input type="text" id="complemento">
+
+<label>Bairro *</label>
+<input type="text" id="bairro" required>
+
+<label>Cidade *</label>
+<input type="text" id="cidade" required>
+
+<label>Estado *</label>
+<input type="text" id="estado" required>
+
+<div class="section">Contato</div>
+
+<label>Telefone</label>
+<input type="text" id="telefone">
+
+<label>WhatsApp *</label>
+<input type="text" id="whatsapp" required>
+
+<label>E-mail de contato *</label>
+<input type="email" id="email" required>
+
+<div class="checkbox">
+<input type="checkbox" id="lgpd" required>
+<label for="lgpd">
+Declaro que li e concordo com o tratamento dos meus dados pessoais em conformidade com a Lei Geral de Proteção de Dados (LGPD). *
+</label>
+</div>
+
+<button type="submit">Salvar Cadastro</button>
+
+</form>
+
+<div class="status" id="status"></div>
+
+</div>
+
+<script>
+document.getElementById('cadastroForm').addEventListener('submit', function(e){
+  e.preventDefault();
+
+  const cadastro = {
+    dataHora: new Date().toISOString(),
+    nome: document.getElementById('nome').value,
+    titulo: document.getElementById('titulo').value,
+    zona: document.getElementById('zona').value,
+    secao: document.getElementById('secao').value,
+    cpf: document.getElementById('cpf').value,
+    nascimento: document.getElementById('nascimento').value,
+    mae: document.getElementById('mae').value,
+    pai: document.getElementById('pai').value,
+    estadoCivil: document.getElementById('estadoCivil').value,
+    genero: document.getElementById('genero').value,
+    cep: document.getElementById('cep').value,
+    endereco: document.getElementById('endereco').value,
+    numero: document.getElementById('numero').value,
+    complemento: document.getElementById('complemento').value,
+    bairro: document.getElementById('bairro').value,
+    cidade: document.getElementById('cidade').value,
+    estado: document.getElementById('estado').value,
+    telefone: document.getElementById('telefone').value,
+    whatsapp: document.getElementById('whatsapp').value,
+    email: document.getElementById('email').value
+  };
+
+  const pendentes = JSON.parse(localStorage.getItem('cadastrosPendentes') || '[]');
+  pendentes.push(cadastro);
+  localStorage.setItem('cadastrosPendentes', JSON.stringify(pendentes));
+
+  document.getElementById('status').innerHTML =
+    'Cadastro salvo no aparelho. Será enviado automaticamente quando houver internet.';
+
+  document.getElementById('cadastroForm').reset();
+});
+</script>
+
+</body>
+</html>
