@@ -24,20 +24,27 @@
     .card{
       background:white;
       width:100%;
-      max-width:420px;
-      padding:30px;
+      max-width:430px;
+      padding:35px 25px;
       border-radius:18px;
       box-shadow:0 8px 25px rgba(0,0,0,0.15);
       text-align:center;
     }
 
+    .logo-container{
+      width:100%;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      margin-bottom:25px;
+    }
+
     .logo{
-  width:240px;
-  max-width:100%;
-  height:auto;
-  display:block;
-  margin:0 auto 20px;
-}
+      width:240px;
+      max-width:100%;
+      height:auto;
+      display:block;
+    }
 
     h1{
       color:#0B1F3A;
@@ -90,7 +97,7 @@
 
     @media (max-width:480px){
       .card{
-        padding:25px;
+        padding:25px 20px;
       }
 
       h1{
@@ -116,21 +123,17 @@
 
   <div class="card">
 
-    <img src="logo-a1.png" alt="Logo Artigo Um" class="logo">
+    <div class="logo-container">
+      <img src="logo-a1.png" alt="Logo Artigo Um" class="logo">
+    </div>
 
     <h1>Artigo Um</h1>
 
     <h2>Cadastro Geral Oficial</h2>
 
-    <p>
-      Bem-vindo ao aplicativo oficial de cadastro do Artigo Um.
-    </p>
+    <p>Bem-vindo ao aplicativo oficial de cadastro do Artigo Um.</p>
 
-    <p>
-      Por meio deste aplicativo, você poderá realizar seu cadastro e manter seus dados
-      atualizados em conformidade com as normas internas da organização e com a Lei
-      Geral de Proteção de Dados (LGPD).
-    </p>
+    <p>Por meio deste aplicativo, você poderá realizar seu cadastro e manter seus dados atualizados em conformidade com as normas internas da organização e com a Lei Geral de Proteção de Dados (LGPD).</p>
 
     <a class="btn btn-cadastro" href="https://forms.gle/kWsjftAKZo6fTwNS9" target="_blank">
       Iniciar Cadastro
