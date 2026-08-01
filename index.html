@@ -3,15 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Artigo Um</title>
+
+  <title>Artigo Um | Cadastro Geral Oficial</title>
+
+  <meta name="theme-color" content="#0B1F3A">
+  <link rel="manifest" href="manifest.json">
 
   <style>
     *{
+      margin:0;
+      padding:0;
       box-sizing:border-box;
     }
 
     body{
-      margin:0;
       font-family:Arial, Helvetica, sans-serif;
       background:#f4f6f9;
       display:flex;
@@ -19,15 +24,16 @@
       align-items:center;
       min-height:100vh;
       padding:20px;
+      color:#333;
     }
 
     .card{
-      background:white;
       width:100%;
       max-width:430px;
-      padding:35px 25px;
-      border-radius:18px;
-      box-shadow:0 8px 25px rgba(0,0,0,0.15);
+      background:#ffffff;
+      border-radius:22px;
+      box-shadow:0 12px 30px rgba(0,0,0,0.12);
+      padding:36px 26px;
       text-align:center;
     }
 
@@ -36,11 +42,11 @@
       display:flex;
       justify-content:center;
       align-items:center;
-      margin-bottom:25px;
+      margin-bottom:18px;
     }
 
     .logo{
-      width:240px;
+      width:260px;
       max-width:100%;
       height:auto;
       display:block;
@@ -48,35 +54,36 @@
 
     h1{
       color:#0B1F3A;
-      margin:0 0 10px;
       font-size:34px;
+      font-weight:700;
+      margin-bottom:8px;
     }
 
-    h2{
+    .subtitle{
       color:#555;
-      margin:0 0 20px;
       font-size:20px;
-      font-weight:bold;
+      font-weight:600;
+      margin-bottom:22px;
     }
 
     p{
       color:#555;
-      line-height:1.6;
-      margin:15px 0;
-      font-size:18px;
+      font-size:16px;
+      line-height:1.7;
+      margin-bottom:16px;
     }
 
     .btn{
       display:block;
       width:100%;
-      padding:15px;
-      margin-top:18px;
-      border-radius:10px;
       text-decoration:none;
-      color:white;
+      color:#fff;
       font-size:17px;
-      font-weight:bold;
-      transition:background 0.2s;
+      font-weight:700;
+      padding:15px;
+      border-radius:12px;
+      margin-top:16px;
+      transition:background .2s ease;
     }
 
     .btn-cadastro{
@@ -84,7 +91,7 @@
     }
 
     .btn-cadastro:hover{
-      background:#6BC74A;
+      background:#69c548;
     }
 
     .btn-admin{
@@ -92,28 +99,39 @@
     }
 
     .btn-admin:hover{
-      background:#E67E22;
+      background:#df7d1f;
+    }
+
+    .footer{
+      margin-top:22px;
+      font-size:13px;
+      color:#777;
+      line-height:1.5;
     }
 
     @media (max-width:480px){
       .card{
-        padding:25px 20px;
+        padding:30px 20px;
+      }
+
+      .logo{
+        width:220px;
       }
 
       h1{
         font-size:30px;
       }
 
-      h2{
+      .subtitle{
         font-size:18px;
       }
 
       p{
-        font-size:17px;
+        font-size:15px;
       }
 
-      .logo{
-        width:180px;
+      .btn{
+        font-size:16px;
       }
     }
   </style>
@@ -129,19 +147,34 @@
 
     <h1>Artigo Um</h1>
 
-    <h2>Cadastro Geral Oficial</h2>
+    <div class="subtitle">Cadastro Geral Oficial</div>
 
-    <p>Bem-vindo ao aplicativo oficial de cadastro do Artigo Um.</p>
+    <p>
+      Bem-vindo ao aplicativo oficial de cadastro do <strong>Artigo Um</strong>.
+    </p>
 
-    <p>Por meio deste aplicativo, você poderá realizar seu cadastro e manter seus dados atualizados em conformidade com as normas internas da organização e com a Lei Geral de Proteção de Dados (LGPD).</p>
+    <p>
+      Utilize este aplicativo para realizar seu cadastro e manter suas informações atualizadas,
+      em conformidade com as normas internas da organização e com a
+      <strong>Lei Geral de Proteção de Dados (LGPD)</strong>.
+    </p>
 
-    <a class="btn btn-cadastro" href="https://forms.gle/kWsjftAKZo6fTwNS9" target="_blank">
+    <a class="btn btn-cadastro"
+       href="https://forms.gle/kWsjftAKZo6fTwNS9"
+       target="_blank">
       Iniciar Cadastro
     </a>
 
-    <a class="btn btn-admin" href="https://docs.google.com/spreadsheets/d/1MfJafyeYJ56SfrwJcSPc__0SsGHTe8dwMl5GEuFhR_Y/edit?resourcekey=&gid=1422780254#gid=1422780254" target="_blank">
+    <a class="btn btn-admin"
+       href="https://docs.google.com/spreadsheets/d/1MfJafyeYJ56SfrwJcSPc__0SsGHTe8dwMl5GEuFhR_Y/edit?resourcekey=&gid=1422780254#gid=1422780254"
+       target="_blank">
       Área Administrativa
     </a>
+
+    <div class="footer">
+      Os dados informados serão tratados conforme a Lei Geral de Proteção de Dados (LGPD)
+      e utilizados exclusivamente para fins institucionais do Artigo Um.
+    </div>
 
   </div>
 
