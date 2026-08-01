@@ -7,99 +7,27 @@
 
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
-
-body{
-  font-family:Arial, Helvetica, sans-serif;
-  background:#f4f6f9;
-  padding:20px;
-}
-
-.container{
-  max-width:700px;
-  margin:0 auto;
-  background:#fff;
-  padding:25px;
-  border-radius:18px;
-  box-shadow:0 10px 30px rgba(0,0,0,0.1);
-}
-
-h1{
-  text-align:center;
-  color:#0B1F3A;
-  margin-bottom:8px;
-}
-
-.subtitle{
-  text-align:center;
-  color:#666;
-  margin-bottom:25px;
-}
-
-.section{
-  margin-top:24px;
-  margin-bottom:12px;
-  color:#0B1F3A;
-  font-size:18px;
-  font-weight:bold;
-}
-
-label{
-  display:block;
-  margin-top:14px;
-  margin-bottom:6px;
-  color:#333;
-  font-weight:bold;
-}
-
-input, select, textarea{
-  width:100%;
-  padding:14px;
-  border:1px solid #ccc;
-  border-radius:10px;
-  font-size:16px;
-}
-
-.checkbox{
-  display:flex;
-  align-items:flex-start;
-  gap:10px;
-  margin-top:18px;
-}
-
-.checkbox input{
-  width:auto;
-  margin-top:3px;
-}
-
-button{
-  width:100%;
-  padding:16px;
-  margin-top:24px;
-  background:#7ED957;
-  color:#fff;
-  border:none;
-  border-radius:10px;
-  font-size:18px;
-  font-weight:bold;
-  cursor:pointer;
-}
-
-button:hover{
-  background:#69c548;
-}
-
-.status{
-  margin-top:18px;
-  text-align:center;
-  font-weight:bold;
-  color:#0B1F3A;
-}
+body{font-family:Arial,Helvetica,sans-serif;background:#f4f6f9;padding:20px;}
+.container{max-width:700px;margin:0 auto;background:#fff;padding:25px;border-radius:18px;box-shadow:0 10px 30px rgba(0,0,0,.1);}
+h1{text-align:center;color:#0B1F3A;margin-bottom:8px;}
+.subtitle{text-align:center;color:#666;margin-bottom:25px;}
+.section{margin-top:24px;margin-bottom:12px;color:#0B1F3A;font-size:18px;font-weight:bold;}
+label{display:block;margin-top:14px;margin-bottom:6px;color:#333;font-weight:bold;}
+input,select{width:100%;padding:14px;border:1px solid #ccc;border-radius:10px;font-size:16px;}
+.checkbox{display:flex;align-items:flex-start;gap:10px;margin-top:18px;}
+.checkbox input{width:auto;margin-top:3px;}
+button{width:100%;padding:16px;margin-top:24px;background:#7ED957;color:#fff;border:none;border-radius:10px;font-size:18px;font-weight:bold;cursor:pointer;}
+button:hover{background:#69c548;}
+.status{margin-top:18px;text-align:center;font-weight:bold;color:#0B1F3A;}
+.sync{margin-bottom:18px;padding:12px;border-radius:10px;background:#eef4ff;color:#0B1F3A;text-align:center;font-weight:bold;}
 </style>
 </head>
 
 <body>
 
 <div class="container">
+
+<div class="sync" id="syncStatus">Verificando sincronização...</div>
 
 <h1>Artigo Um</h1>
 <div class="subtitle">Novo Cadastro</div>
@@ -108,10 +36,10 @@ button:hover{
 
 <div class="section">Dados Pessoais</div>
 
-<label>Nome completo (conforme consta no Título de Eleitor) *</label>
+<label>Nome completo *</label>
 <input type="text" id="nome" required>
 
-<label>Número do Título de Eleitor</label>
+<label>Título de Eleitor</label>
 <input type="text" id="titulo">
 
 <label>Zona Eleitoral</label>
@@ -156,7 +84,7 @@ button:hover{
 <label>CEP</label>
 <input type="text" id="cep">
 
-<label>Endereço completo (logradouro) *</label>
+<label>Endereço *</label>
 <input type="text" id="endereco" required>
 
 <label>Número *</label>
@@ -182,14 +110,12 @@ button:hover{
 <label>WhatsApp *</label>
 <input type="text" id="whatsapp" required>
 
-<label>E-mail de contato *</label>
+<label>E-mail *</label>
 <input type="email" id="email" required>
 
 <div class="checkbox">
 <input type="checkbox" id="lgpd" required>
-<label for="lgpd">
-Declaro que li e concordo com o tratamento dos meus dados pessoais em conformidade com a Lei Geral de Proteção de Dados (LGPD). *
-</label>
+<label for="lgpd">Concordo com o tratamento dos meus dados conforme a LGPD.</label>
 </div>
 
 <button type="submit">Salvar Cadastro</button>
@@ -201,42 +127,106 @@ Declaro que li e concordo com o tratamento dos meus dados pessoais em conformida
 </div>
 
 <script>
-document.getElementById('cadastroForm').addEventListener('submit', function(e){
+const API_URL = "https://script.google.com/macros/s/AKfycbxcFcKBO39I7UibZoFiPz3a1TZIpXtN5kGK0XnFJu-P-yfMhpCcGCMZIE2LmGtnD-qFqw/exec";
+
+function getPendentes(){
+  return JSON.parse(localStorage.getItem("cadastrosPendentes") || "[]");
+}
+
+function setPendentes(lista){
+  localStorage.setItem("cadastrosPendentes", JSON.stringify(lista));
+}
+
+function atualizarStatusSync(){
+  const qtd = getPendentes().length;
+  const el = document.getElementById("syncStatus");
+  if(!navigator.onLine){
+    el.innerHTML = "Sem internet • " + qtd + " cadastro(s) pendente(s)";
+  }else{
+    el.innerHTML = "Online • " + qtd + " cadastro(s) pendente(s)";
+  }
+}
+
+async function sincronizarCadastros(){
+  if(!navigator.onLine) return;
+
+  let pendentes = getPendentes();
+  if(pendentes.length === 0){
+    atualizarStatusSync();
+    return;
+  }
+
+  let restantes = [];
+
+  for(const cadastro of pendentes){
+    try{
+      const resposta = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(cadastro)
+      });
+
+      if(!resposta.ok){
+        restantes.push(cadastro);
+      }
+    }catch(e){
+      restantes.push(cadastro);
+    }
+  }
+
+  setPendentes(restantes);
+  atualizarStatusSync();
+
+  if(restantes.length === 0){
+    document.getElementById("status").innerHTML = "Todos os cadastros foram sincronizados com sucesso.";
+  }else{
+    document.getElementById("status").innerHTML = restantes.length + " cadastro(s) ainda pendente(s).";
+  }
+}
+
+document.getElementById("cadastroForm").addEventListener("submit", function(e){
   e.preventDefault();
 
   const cadastro = {
-    dataHora: new Date().toISOString(),
-    nome: document.getElementById('nome').value,
-    titulo: document.getElementById('titulo').value,
-    zona: document.getElementById('zona').value,
-    secao: document.getElementById('secao').value,
-    cpf: document.getElementById('cpf').value,
-    nascimento: document.getElementById('nascimento').value,
-    mae: document.getElementById('mae').value,
-    pai: document.getElementById('pai').value,
-    estadoCivil: document.getElementById('estadoCivil').value,
-    genero: document.getElementById('genero').value,
-    cep: document.getElementById('cep').value,
-    endereco: document.getElementById('endereco').value,
-    numero: document.getElementById('numero').value,
-    complemento: document.getElementById('complemento').value,
-    bairro: document.getElementById('bairro').value,
-    cidade: document.getElementById('cidade').value,
-    estado: document.getElementById('estado').value,
-    telefone: document.getElementById('telefone').value,
-    whatsapp: document.getElementById('whatsapp').value,
-    email: document.getElementById('email').value
+    nome: document.getElementById("nome").value,
+    titulo: document.getElementById("titulo").value,
+    zona: document.getElementById("zona").value,
+    secao: document.getElementById("secao").value,
+    cpf: document.getElementById("cpf").value,
+    nascimento: document.getElementById("nascimento").value,
+    mae: document.getElementById("mae").value,
+    pai: document.getElementById("pai").value,
+    estadoCivil: document.getElementById("estadoCivil").value,
+    genero: document.getElementById("genero").value,
+    cep: document.getElementById("cep").value,
+    endereco: document.getElementById("endereco").value,
+    numero: document.getElementById("numero").value,
+    complemento: document.getElementById("complemento").value,
+    bairro: document.getElementById("bairro").value,
+    cidade: document.getElementById("cidade").value,
+    estado: document.getElementById("estado").value,
+    telefone: document.getElementById("telefone").value,
+    whatsapp: document.getElementById("whatsapp").value,
+    email: document.getElementById("email").value
   };
 
-  const pendentes = JSON.parse(localStorage.getItem('cadastrosPendentes') || '[]');
+  const pendentes = getPendentes();
   pendentes.push(cadastro);
-  localStorage.setItem('cadastrosPendentes', JSON.stringify(pendentes));
+  setPendentes(pendentes);
 
-  document.getElementById('status').innerHTML =
-    'Cadastro salvo no aparelho. Será enviado automaticamente quando houver internet.';
+  document.getElementById("cadastroForm").reset();
+  document.getElementById("status").innerHTML =
+    "Cadastro salvo no aparelho. Será sincronizado automaticamente quando houver internet.";
 
-  document.getElementById('cadastroForm').reset();
+  atualizarStatusSync();
+  sincronizarCadastros();
 });
+
+window.addEventListener("online", sincronizarCadastros);
+window.addEventListener("offline", atualizarStatusSync);
+
+atualizarStatusSync();
+sincronizarCadastros();
 </script>
 
 </body>
