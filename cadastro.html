@@ -123,6 +123,9 @@ button:hover{background:#69c548;}
 </form>
 
 <div class="status" id="status"></div>
+<button type="button" onclick="testarAPI()" style="background:#0B1F3A;margin-top:10px;">
+  Testar Conexão com a Planilha
+</button>
 
 </div>
 
@@ -229,6 +232,48 @@ window.addEventListener("offline", atualizarStatusSync);
 atualizarStatusSync();
 sincronizarCadastros();
 </script>
+async function testarAPI() {
+  const teste = {
+    nome: "TESTE API",
+    titulo: "",
+    zona: "",
+    secao: "",
+    cpf: "",
+    nascimento: "2000-01-01",
+    mae: "Mãe Teste",
+    pai: "",
+    estadoCivil: "",
+    genero: "",
+    cep: "",
+    endereco: "Rua Teste",
+    numero: "1",
+    complemento: "",
+    bairro: "Centro",
+    cidade: "Cidade Teste",
+    estado: "SP",
+    telefone: "",
+    whatsapp: "11999999999",
+    email: "teste@artigoum.com"
+  };
+
+  try {
+    const resposta = await fetch(API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(teste)
+    });
+
+    const texto = await resposta.text();
+    document.getElementById("status").innerHTML =
+      "Resposta da API: " + texto;
+
+  } catch (erro) {
+    document.getElementById("status").innerHTML =
+      "Erro ao conectar: " + erro;
+  }
+}
 
 </body>
 </html>
