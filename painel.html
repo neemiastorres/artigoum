@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel Administrativo - Artigo Um</title>
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  font-family:Arial, Helvetica, sans-serif;
+  background:#f4f6f9;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
+  padding:20px;
+}
+
+.card{
+  background:white;
+  width:100%;
+  max-width:520px;
+  border-radius:20px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.15);
+  padding:30px;
+}
+
+.logo{
+  width:90px;
+  height:90px;
+  border-radius:50%;
+  background:#0B1F3A;
+  color:white;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:28px;
+  font-weight:bold;
+  margin:0 auto 20px;
+}
+
+h1{
+  text-align:center;
+  color:#0B1F3A;
+  margin-bottom:6px;
+}
+
+.subtitle{
+  text-align:center;
+  color:#666;
+  margin-bottom:25px;
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:15px;
+  margin-bottom:25px;
+}
+
+.stat{
+  background:#eef4ff;
+  border-radius:12px;
+  padding:18px;
+  text-align:center;
+}
+
+.stat h2{
+  margin:0;
+  color:#0B1F3A;
+  font-size:28px;
+}
+
+.stat p{
+  margin:6px 0 0;
+  color:#555;
+  font-size:14px;
+}
+
+.btn{
+  display:block;
+  width:100%;
+  text-align:center;
+  text-decoration:none;
+  padding:15px;
+  border-radius:10px;
+  font-size:17px;
+  font-weight:bold;
+  color:white;
+  margin-top:15px;
+}
+
+.btn-planilha{
+  background:#0B1F3A;
+}
+
+.btn-planilha:hover{
+  background:#13305c;
+}
+
+.btn-voltar{
+  background:#7ED957;
+}
+
+.btn-voltar:hover{
+  background:#6BC74A;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="card">
+
+<div class="logo">A1</div>
+
+<h1>Painel Administrativo</h1>
+<div class="subtitle">Sistema de Cadastro Geral</div>
+
+<div class="stats">
+
+<div class="stat">
+<h2>6</h2>
+<p>Total de Cadastrados</p>
+</div>
+
+<div class="stat">
+<h2>Hoje</h2>
+<p>Último Cadastro</p>
+</div>
+
+</div>
+
+<a class="btn btn-planilha"
+href="https://docs.google.com/spreadsheets/d/1MfJafyeYJ56SfrwJcSPc__0SsGHTe8dwMl5GEuFhR_Y/edit?resourcekey=&gid=1422780254#gid=1422780254"
+target="_blank">
+
+Abrir Planilha Completa
+
+</a>
+
+<a class="btn btn-voltar" href="index.html">
+
+Voltar ao Aplicativo
+
+</a>
+
+</div>
+
+</body>
+</html>
