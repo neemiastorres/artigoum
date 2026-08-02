@@ -1,155 +1,129 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Novo Cadastro - Artigo Um</title>
+<title>Cadastro - Artigo Um</title>
 
 <style>
-*{box-sizing:border-box;margin:0;padding:0;}
-
+*{box-sizing:border-box}
 body{
-  font-family:Arial, Helvetica, sans-serif;
+  font-family:Arial,Helvetica,sans-serif;
   background:#f4f6f9;
+  margin:0;
   padding:20px;
 }
-
 .container{
-  max-width:700px;
+  max-width:720px;
   margin:0 auto;
   background:#fff;
-  padding:25px;
+  padding:24px;
   border-radius:18px;
-  box-shadow:0 10px 30px rgba(0,0,0,.1);
+  box-shadow:0 10px 30px rgba(0,0,0,.12);
 }
-
 h1{
   text-align:center;
   color:#0B1F3A;
-  margin-bottom:8px;
+  margin-bottom:6px;
 }
-
 .subtitle{
   text-align:center;
   color:#666;
-  margin-bottom:25px;
+  margin-bottom:20px;
 }
-
+.sync{
+  background:#eef4ff;
+  color:#0B1F3A;
+  padding:12px;
+  border-radius:10px;
+  text-align:center;
+  font-weight:bold;
+  margin-bottom:20px;
+}
 .section{
-  margin-top:24px;
-  margin-bottom:12px;
+  margin:24px 0 12px;
   color:#0B1F3A;
   font-size:18px;
   font-weight:bold;
 }
-
 label{
   display:block;
-  margin-top:14px;
-  margin-bottom:6px;
-  color:#333;
+  margin:12px 0 6px;
   font-weight:bold;
+  color:#333;
 }
-
-input, select{
+input,select{
   width:100%;
   padding:14px;
   border:1px solid #ccc;
   border-radius:10px;
   font-size:16px;
 }
-
 .checkbox{
   display:flex;
-  align-items:flex-start;
   gap:10px;
-  margin-top:18px;
+  align-items:flex-start;
+  margin-top:16px;
 }
-
 .checkbox input{
   width:auto;
-  margin-top:3px;
+  margin-top:4px;
 }
-
 button{
   width:100%;
-  padding:16px;
-  margin-top:20px;
-  background:#7ED957;
-  color:#fff;
+  padding:15px;
+  margin-top:18px;
   border:none;
   border-radius:10px;
-  font-size:18px;
+  color:#fff;
+  font-size:17px;
   font-weight:bold;
   cursor:pointer;
 }
-
-button:hover{
-  background:#69c548;
-}
-
+#btnSalvar{background:#7ED957}
+#btnEnviar{background:#0B1F3A}
+#btnLimpar{background:#E67E22}
 .status{
   margin-top:18px;
   text-align:center;
   font-weight:bold;
   color:#0B1F3A;
 }
-
-.sync{
-  margin-bottom:18px;
-  padding:12px;
-  border-radius:10px;
-  background:#eef4ff;
-  color:#0B1F3A;
-  text-align:center;
-  font-weight:bold;
-}
-
-#btnTeste{
-  background:#0B1F3A;
-}
 </style>
-</head>
 
+</head>
 <body>
 
 <div class="container">
 
-<div class="sync" id="syncStatus">Verificando sincronização...</div>
+<div class="sync" id="syncStatus">Verificando conexão...</div>
 
 <h1>Artigo Um</h1>
-<div class="subtitle">Novo Cadastro</div>
+<div class="subtitle">Cadastro Geral Oficial</div>
 
 <form id="cadastroForm">
 
 <div class="section">Dados Pessoais</div>
 
-<label>Nome completo *</label>
-<input type="text" id="nome" required>
+<label>Nome completo *</label> <input type="text" id="nome" required>
 
-<label>Título de Eleitor</label>
-<input type="text" id="titulo">
+<label>Título de Eleitor</label> <input type="text" id="titulo">
 
-<label>Zona Eleitoral</label>
-<input type="text" id="zona">
+<label>Zona Eleitoral</label> <input type="text" id="zona">
 
-<label>Seção Eleitoral</label>
-<input type="text" id="secao">
+<label>Seção Eleitoral</label> <input type="text" id="secao">
 
-<label>CPF</label>
-<input type="text" id="cpf">
+<label>CPF</label> <input type="text" id="cpf">
 
-<label>Data de nascimento *</label>
-<input type="date" id="nascimento" required>
+<label>Data de nascimento *</label> <input type="date" id="nascimento" required>
 
-<label>Nome da mãe *</label>
-<input type="text" id="mae" required>
+<label>Nome da mãe *</label> <input type="text" id="mae" required>
 
-<label>Nome do pai</label>
-<input type="text" id="pai">
+<label>Nome do pai</label> <input type="text" id="pai">
 
-<label>Estado civil</label>
-<select id="estadoCivil">
+<label>Estado civil</label> <select id="estadoCivil">
+
 <option value="">Selecione</option>
 <option>Solteiro(a)</option>
 <option>Casado(a)</option>
@@ -158,8 +132,8 @@ button:hover{
 <option>Viúvo(a)</option>
 </select>
 
-<label>Gênero</label>
-<select id="genero">
+<label>Gênero</label> <select id="genero">
+
 <option value="">Selecione</option>
 <option>Masculino</option>
 <option>Feminino</option>
@@ -169,49 +143,43 @@ button:hover{
 
 <div class="section">Endereço</div>
 
-<label>CEP</label>
-<input type="text" id="cep">
+<label>CEP</label> <input type="text" id="cep">
 
-<label>Endereço *</label>
-<input type="text" id="endereco" required>
+<label>Endereço *</label> <input type="text" id="endereco" required>
 
-<label>Número *</label>
-<input type="text" id="numero" required>
+<label>Número *</label> <input type="text" id="numero" required>
 
-<label>Complemento</label>
-<input type="text" id="complemento">
+<label>Complemento</label> <input type="text" id="complemento">
 
-<label>Bairro *</label>
-<input type="text" id="bairro" required>
+<label>Bairro *</label> <input type="text" id="bairro" required>
 
-<label>Cidade *</label>
-<input type="text" id="cidade" required>
+<label>Cidade *</label> <input type="text" id="cidade" required>
 
-<label>Estado *</label>
-<input type="text" id="estado" required>
+<label>Estado *</label> <input type="text" id="estado" required>
 
 <div class="section">Contato</div>
 
-<label>Telefone</label>
-<input type="text" id="telefone">
+<label>Telefone</label> <input type="text" id="telefone">
 
-<label>WhatsApp *</label>
-<input type="text" id="whatsapp" required>
+<label>WhatsApp *</label> <input type="text" id="whatsapp" required>
 
-<label>E-mail *</label>
-<input type="email" id="email" required>
+<label>E-mail *</label> <input type="email" id="email" required>
 
 <div class="checkbox">
 <input type="checkbox" id="lgpd" required>
 <label for="lgpd">Concordo com o tratamento dos meus dados conforme a LGPD.</label>
 </div>
 
-<button type="submit">Salvar Cadastro</button>
+<button id="btnSalvar" type="submit">Salvar Cadastro</button>
 
 </form>
 
-<button id="btnTeste" type="button" onclick="testarAPI()">
-Testar Conexão com a Planilha
+<button id="btnEnviar" type="button" onclick="enviarPendentes()">
+Enviar Cadastros Pendentes
+</button>
+
+<button id="btnLimpar" type="button" onclick="limparPendentes()">
+Limpar Cadastros Pendentes
 </button>
 
 <div class="status" id="status"></div>
@@ -240,10 +208,8 @@ function atualizarStatusSync(){
   }
 }
 
-document.getElementById("cadastroForm").addEventListener("submit", function(e){
-  e.preventDefault();
-
-  const cadastro = {
+function obterCadastro(){
+  return {
     nome: document.getElementById("nome").value,
     titulo: document.getElementById("titulo").value,
     zona: document.getElementById("zona").value,
@@ -265,74 +231,93 @@ document.getElementById("cadastroForm").addEventListener("submit", function(e){
     whatsapp: document.getElementById("whatsapp").value,
     email: document.getElementById("email").value
   };
+}
 
-  const pendentes = getPendentes();
-  pendentes.push(cadastro);
-  setPendentes(pendentes);
+async function enviarCadastro(cadastro){
+  await fetch(API_URL,{
+    method:"POST",
+    mode:"no-cors",
+    headers:{"Content-Type":"text/plain;charset=utf-8"},
+    body:JSON.stringify(cadastro)
+  });
+}
 
-  document.getElementById("status").innerHTML =
-    "Cadastro salvo localmente. Ainda não foi sincronizado.";
+document.getElementById("cadastroForm").addEventListener("submit", async function(e){
+  e.preventDefault();
+
+  const cadastro = obterCadastro();
+
+  if(navigator.onLine){
+    try{
+      await enviarCadastro(cadastro);
+      document.getElementById("status").innerHTML =
+        "Cadastro enviado com sucesso.";
+    }catch(err){
+      const pendentes = getPendentes();
+      pendentes.push(cadastro);
+      setPendentes(pendentes);
+      document.getElementById("status").innerHTML =
+        "Sem comunicação com o servidor. Cadastro salvo no aparelho.";
+    }
+  }else{
+    const pendentes = getPendentes();
+    pendentes.push(cadastro);
+    setPendentes(pendentes);
+    document.getElementById("status").innerHTML =
+      "Sem internet. Cadastro salvo no aparelho.";
+  }
 
   this.reset();
   atualizarStatusSync();
 });
 
-async function testarAPI(){
+async function enviarPendentes(){
 
-  const teste = {
-    nome: "TESTE API",
-    titulo: "",
-    zona: "",
-    secao: "",
-    cpf: "",
-    nascimento: "2000-01-01",
-    mae: "Mãe Teste",
-    pai: "",
-    estadoCivil: "",
-    genero: "",
-    cep: "",
-    endereco: "Rua Teste",
-    numero: "1",
-    complemento: "",
-    bairro: "Centro",
-    cidade: "Cidade Teste",
-    estado: "SP",
-    telefone: "",
-    whatsapp: "11999999999",
-    email: "teste@artigoum.com"
-  };
-
-  document.getElementById("status").innerHTML = "Enviando teste...";
-
-  try{
-
-    const resposta = await fetch(API_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(teste)
-    });
-
-    const texto = await resposta.text();
-
+  if(!navigator.onLine){
     document.getElementById("status").innerHTML =
-      "Resposta da API: " + texto;
-
-  }catch(erro){
-
-    document.getElementById("status").innerHTML =
-      "Erro ao conectar: " + erro;
-
+      "Não há conexão com a internet.";
+    return;
   }
 
+  let pendentes = getPendentes();
+
+  if(pendentes.length===0){
+    document.getElementById("status").innerHTML =
+      "Não existem cadastros pendentes.";
+    return;
+  }
+
+  let enviados = 0;
+  let restantes = [];
+
+  for(const cadastro of pendentes){
+    try{
+      await enviarCadastro(cadastro);
+      enviados++;
+    }catch(err){
+      restantes.push(cadastro);
+    }
+  }
+
+  setPendentes(restantes);
+  atualizarStatusSync();
+
+  document.getElementById("status").innerHTML =
+    enviados + " cadastro(s) enviado(s). " +
+    restantes.length + " pendente(s).";
+}
+
+function limparPendentes(){
+  localStorage.removeItem("cadastrosPendentes");
+  atualizarStatusSync();
+  document.getElementById("status").innerHTML =
+    "Cadastros pendentes removidos.";
 }
 
 window.addEventListener("online", atualizarStatusSync);
 window.addEventListener("offline", atualizarStatusSync);
 
 atualizarStatusSync();
-
 </script>
 
 </body>
