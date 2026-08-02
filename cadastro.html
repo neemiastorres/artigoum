@@ -7,19 +7,107 @@
 
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:Arial,Helvetica,sans-serif;background:#f4f6f9;padding:20px;}
-.container{max-width:700px;margin:0 auto;background:#fff;padding:25px;border-radius:18px;box-shadow:0 10px 30px rgba(0,0,0,.1);}
-h1{text-align:center;color:#0B1F3A;margin-bottom:8px;}
-.subtitle{text-align:center;color:#666;margin-bottom:25px;}
-.section{margin-top:24px;margin-bottom:12px;color:#0B1F3A;font-size:18px;font-weight:bold;}
-label{display:block;margin-top:14px;margin-bottom:6px;color:#333;font-weight:bold;}
-input,select{width:100%;padding:14px;border:1px solid #ccc;border-radius:10px;font-size:16px;}
-.checkbox{display:flex;align-items:flex-start;gap:10px;margin-top:18px;}
-.checkbox input{width:auto;margin-top:3px;}
-button{width:100%;padding:16px;margin-top:24px;background:#7ED957;color:#fff;border:none;border-radius:10px;font-size:18px;font-weight:bold;cursor:pointer;}
-button:hover{background:#69c548;}
-.status{margin-top:18px;text-align:center;font-weight:bold;color:#0B1F3A;}
-.sync{margin-bottom:18px;padding:12px;border-radius:10px;background:#eef4ff;color:#0B1F3A;text-align:center;font-weight:bold;}
+
+body{
+  font-family:Arial, Helvetica, sans-serif;
+  background:#f4f6f9;
+  padding:20px;
+}
+
+.container{
+  max-width:700px;
+  margin:0 auto;
+  background:#fff;
+  padding:25px;
+  border-radius:18px;
+  box-shadow:0 10px 30px rgba(0,0,0,.1);
+}
+
+h1{
+  text-align:center;
+  color:#0B1F3A;
+  margin-bottom:8px;
+}
+
+.subtitle{
+  text-align:center;
+  color:#666;
+  margin-bottom:25px;
+}
+
+.section{
+  margin-top:24px;
+  margin-bottom:12px;
+  color:#0B1F3A;
+  font-size:18px;
+  font-weight:bold;
+}
+
+label{
+  display:block;
+  margin-top:14px;
+  margin-bottom:6px;
+  color:#333;
+  font-weight:bold;
+}
+
+input, select{
+  width:100%;
+  padding:14px;
+  border:1px solid #ccc;
+  border-radius:10px;
+  font-size:16px;
+}
+
+.checkbox{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  margin-top:18px;
+}
+
+.checkbox input{
+  width:auto;
+  margin-top:3px;
+}
+
+button{
+  width:100%;
+  padding:16px;
+  margin-top:20px;
+  background:#7ED957;
+  color:#fff;
+  border:none;
+  border-radius:10px;
+  font-size:18px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+button:hover{
+  background:#69c548;
+}
+
+.status{
+  margin-top:18px;
+  text-align:center;
+  font-weight:bold;
+  color:#0B1F3A;
+}
+
+.sync{
+  margin-bottom:18px;
+  padding:12px;
+  border-radius:10px;
+  background:#eef4ff;
+  color:#0B1F3A;
+  text-align:center;
+  font-weight:bold;
+}
+
+#btnTeste{
+  background:#0B1F3A;
+}
 </style>
 </head>
 
@@ -122,10 +210,11 @@ button:hover{background:#69c548;}
 
 </form>
 
-<div class="status" id="status"></div>
-<button type="button" onclick="testarAPI()" style="background:#0B1F3A;margin-top:10px;">
-  Testar Conexão com a Planilha
+<button id="btnTeste" type="button" onclick="testarAPI()">
+Testar Conexão com a Planilha
 </button>
+
+<div class="status" id="status"></div>
 
 </div>
 
@@ -143,48 +232,11 @@ function setPendentes(lista){
 function atualizarStatusSync(){
   const qtd = getPendentes().length;
   const el = document.getElementById("syncStatus");
-  if(!navigator.onLine){
-    el.innerHTML = "Sem internet • " + qtd + " cadastro(s) pendente(s)";
-  }else{
+
+  if(navigator.onLine){
     el.innerHTML = "Online • " + qtd + " cadastro(s) pendente(s)";
-  }
-}
-
-async function sincronizarCadastros(){
-  if(!navigator.onLine) return;
-
-  let pendentes = getPendentes();
-  if(pendentes.length === 0){
-    atualizarStatusSync();
-    return;
-  }
-
-  let restantes = [];
-
-  for(const cadastro of pendentes){
-    try{
- try{
-  await fetch(API_URL, {
-    method: "POST",
-    mode: "no-cors",
-    headers: {
-      "Content-Type": "text/plain;charset=utf-8"
-    },
-    body: JSON.stringify(cadastro)
-  });
-
-}catch(e){
-  restantes.push(cadastro);
-}
-  }
-
-  setPendentes(restantes);
-  atualizarStatusSync();
-
-  if(restantes.length === 0){
-    document.getElementById("status").innerHTML = "Todos os cadastros foram sincronizados com sucesso.";
   }else{
-    document.getElementById("status").innerHTML = restantes.length + " cadastro(s) ainda pendente(s).";
+    el.innerHTML = "Sem internet • " + qtd + " cadastro(s) pendente(s)";
   }
 }
 
@@ -218,21 +270,15 @@ document.getElementById("cadastroForm").addEventListener("submit", function(e){
   pendentes.push(cadastro);
   setPendentes(pendentes);
 
-  document.getElementById("cadastroForm").reset();
   document.getElementById("status").innerHTML =
-    "Cadastro salvo no aparelho. Será sincronizado automaticamente quando houver internet.";
+    "Cadastro salvo localmente. Ainda não foi sincronizado.";
 
+  this.reset();
   atualizarStatusSync();
-  sincronizarCadastros();
 });
 
-window.addEventListener("online", sincronizarCadastros);
-window.addEventListener("offline", atualizarStatusSync);
+async function testarAPI(){
 
-atualizarStatusSync();
-sincronizarCadastros();
-</script>
-async function testarAPI() {
   const teste = {
     nome: "TESTE API",
     titulo: "",
@@ -256,7 +302,10 @@ async function testarAPI() {
     email: "teste@artigoum.com"
   };
 
-  try {
+  document.getElementById("status").innerHTML = "Enviando teste...";
+
+  try{
+
     const resposta = await fetch(API_URL, {
       method: "POST",
       headers: {
@@ -266,14 +315,25 @@ async function testarAPI() {
     });
 
     const texto = await resposta.text();
+
     document.getElementById("status").innerHTML =
       "Resposta da API: " + texto;
 
-  } catch (erro) {
+  }catch(erro){
+
     document.getElementById("status").innerHTML =
       "Erro ao conectar: " + erro;
+
   }
+
 }
+
+window.addEventListener("online", atualizarStatusSync);
+window.addEventListener("offline", atualizarStatusSync);
+
+atualizarStatusSync();
+
+</script>
 
 </body>
 </html>
