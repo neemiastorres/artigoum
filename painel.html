@@ -158,7 +158,7 @@ const API_URL = "https://script.google.com/macros/s/AKfycbxcFcKBO39I7UibZoFiPz3a
 
 async function carregarPainel() {
   try {
-    const resposta = await fetch(API_URL);
+    const resposta = await fetch(API_URL + "?t=" + new Date().getTime());
     const dados = await resposta.json();
 
     document.getElementById("totalCadastros").innerText = dados.total;
