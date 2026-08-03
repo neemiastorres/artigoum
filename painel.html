@@ -15,20 +15,19 @@ body{
   margin:0;
   font-family:Arial, Helvetica, sans-serif;
   background:#f4f6f9;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  min-height:100vh;
   padding:20px;
+}
+
+.container{
+  max-width:1000px;
+  margin:0 auto;
 }
 
 .card{
   background:white;
-  width:100%;
-  max-width:520px;
   border-radius:20px;
-  box-shadow:0 10px 30px rgba(0,0,0,0.15);
-  padding:30px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.12);
+  padding:25px;
 }
 
 .logo{
@@ -48,7 +47,7 @@ body{
 h1{
   text-align:center;
   color:#0B1F3A;
-  margin-bottom:6px;
+  margin:0 0 5px;
 }
 
 .subtitle{
@@ -59,28 +58,73 @@ h1{
 
 .stats{
   display:grid;
-  grid-template-columns:1fr 1fr;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
   gap:15px;
   margin-bottom:25px;
 }
 
 .stat{
   background:#eef4ff;
-  border-radius:12px;
-  padding:18px;
+  border-radius:14px;
+  padding:20px;
   text-align:center;
 }
 
 .stat h2{
   margin:0;
   color:#0B1F3A;
-  font-size:28px;
+  font-size:32px;
 }
 
 .stat p{
-  margin:6px 0 0;
+  margin:8px 0 0;
   color:#555;
-  font-size:14px;
+  font-size:15px;
+}
+
+.search{
+  margin-bottom:20px;
+}
+
+.search label{
+  display:block;
+  margin-bottom:8px;
+  color:#0B1F3A;
+  font-weight:bold;
+}
+
+.search input{
+  width:100%;
+  padding:14px;
+  border:1px solid #ccc;
+  border-radius:10px;
+  font-size:16px;
+}
+
+.table-container{
+  overflow-x:auto;
+  margin-top:20px;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+th{
+  background:#0B1F3A;
+  color:white;
+  padding:12px;
+  text-align:left;
+}
+
+td{
+  padding:12px;
+  border-bottom:1px solid #ddd;
+}
+
+tr:nth-child(even){
+  background:#f8f9fb;
 }
 
 .btn{
@@ -111,18 +155,26 @@ h1{
 .btn-voltar:hover{
   background:#6BC74A;
 }
+
+.info{
+  text-align:center;
+  color:#666;
+  margin-top:15px;
+}
 </style>
 
 </head>
 
 <body>
 
+<div class="container">
+
 <div class="card">
 
 <div class="logo">A1</div>
 
 <h1>Painel Administrativo</h1>
-<div class="subtitle">Sistema de Cadastro Geral</div>
+<div class="subtitle">Sistema de Cadastro Geral - Artigo Um</div>
 
 <div class="stats">
 
@@ -135,6 +187,41 @@ h1{
 <h2 id="ultimoCadastro">--</h2>
 <p>Último Cadastro</p>
 </div>
+
+</div>
+
+<div class="search">
+<label for="pesquisa">Pesquisar por Nome, Bairro, Cidade, Estado ou WhatsApp</label>
+<input type="text" id="pesquisa" placeholder="Digite para pesquisar...">
+</div>
+
+<div class="table-container">
+
+<table>
+
+<thead>
+<tr>
+<th>Data</th>
+<th>Nome</th>
+<th>Bairro</th>
+<th>Cidade</th>
+<th>Estado</th>
+<th>WhatsApp</th>
+<th>E-mail</th>
+</tr>
+</thead>
+
+<tbody id="tabelaResultados">
+
+<tr>
+<td colspan="7" style="text-align:center;">
+Digite um termo de pesquisa acima.
+</td>
+</tr>
+
+</tbody>
+
+</table>
 
 </div>
 
@@ -152,33 +239,111 @@ Voltar ao Aplicativo
 
 </a>
 
+<div class="info">
+Os dados são atualizados diretamente da planilha oficial do Artigo Um.
 </div>
+
+</div>
+
+</div>
+
 <script>
+
 const API_URL = "https://script.google.com/macros/s/AKfycbxcFcKBO39I7UibZoFiPz3a1TZIpXtN5kGK0XnFJu-P-yfMhpCcGCMZIE2LmGtnD-qFqw/exec";
 
-async function carregarPainel() {
-  try {
-    const resposta = await fetch(API_URL + "?t=" + new Date().getTime());
-    const dados = await resposta.json();
+async function carregarPainel(){
 
-    document.getElementById("totalCadastros").innerText = dados.total;
+try{
 
-    if (dados.ultimo) {
-      const data = new Date(dados.ultimo);
-      const texto = data.toLocaleDateString("pt-BR") + " " +
-                    data.toLocaleTimeString("pt-BR", {hour: "2-digit", minute: "2-digit"});
-      document.getElementById("ultimoCadastro").innerText = texto;
-    } else {
-      document.getElementById("ultimoCadastro").innerText = "--";
-    }
+const resposta = await fetch(API_URL + "?t=" + new Date().getTime());
+const dados = await resposta.json();
 
-  } catch (erro) {
-    document.getElementById("totalCadastros").innerText = "Erro";
-    document.getElementById("ultimoCadastro").innerText = "Erro";
-  }
+document.getElementById("totalCadastros").innerText = dados.total;
+
+if(dados.ultimo){
+
+const data = new Date(dados.ultimo);
+
+document.getElementById("ultimoCadastro").innerText =
+data.toLocaleDateString("pt-BR") + " " +
+data.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});
+
 }
 
+}catch(e){
+
+document.getElementById("totalCadastros").innerText = "Erro";
+document.getElementById("ultimoCadastro").innerText = "Erro";
+
+}
+
+}
+
+async function pesquisar(){
+
+const termo = document.getElementById("pesquisa").value.trim();
+
+const tbody = document.getElementById("tabelaResultados");
+
+if(termo === ""){
+
+tbody.innerHTML =
+'<tr><td colspan="7" style="text-align:center;">Digite um termo de pesquisa acima.</td></tr>';
+
+return;
+
+}
+
+try{
+
+const resposta = await fetch(API_URL + "?q=" + encodeURIComponent(termo));
+const dados = await resposta.json();
+
+if(!dados.resultados || dados.resultados.length === 0){
+
+tbody.innerHTML =
+'<tr><td colspan="7" style="text-align:center;">Nenhum cadastro encontrado.</td></tr>';
+
+return;
+
+}
+
+tbody.innerHTML = "";
+
+dados.resultados.forEach(function(item){
+
+const data = new Date(item.data);
+
+const linha =
+`<tr>
+<td>${data.toLocaleDateString('pt-BR')}</td>
+<td>${item.nome || ''}</td>
+<td>${item.bairro || ''}</td>
+<td>${item.cidade || ''}</td>
+<td>${item.estado || ''}</td>
+<td>${item.whatsapp || ''}</td>
+<td>${item.email || ''}</td>
+</tr>`;
+
+tbody.innerHTML += linha;
+
+});
+
+}catch(e){
+
+tbody.innerHTML =
+'<tr><td colspan="7" style="text-align:center;">Erro ao consultar os dados.</td></tr>';
+
+}
+
+}
+
+document.getElementById("pesquisa").addEventListener("input",pesquisar);
+
 carregarPainel();
+
 </script>
+
 </body>
 </html>
+
