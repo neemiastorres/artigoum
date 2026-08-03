@@ -30,18 +30,18 @@ body{
   padding:25px;
 }
 
-.logo{
-  width:90px;
-  height:90px;
-  border-radius:50%;
-  background:#0B1F3A;
-  color:white;
+.logo-container{
   display:flex;
   justify-content:center;
   align-items:center;
-  font-size:28px;
-  font-weight:bold;
   margin:0 auto 20px;
+}
+
+.logo-img{
+  width:240px;
+  max-width:100%;
+  height:auto;
+  display:block;
 }
 
 h1{
@@ -171,7 +171,9 @@ tr:nth-child(even){
 
 <div class="card">
 
-<div class="logo">A1</div>
+<div class="logo-container">
+  <img src="logo-artigoum.png" alt="Artigo Um" class="logo-img">
+</div>
 
 <h1>Painel Administrativo</h1>
 <div class="subtitle">Sistema de Cadastro Geral - Artigo Um</div>
