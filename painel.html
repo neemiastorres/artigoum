@@ -153,6 +153,32 @@ Voltar ao Aplicativo
 </a>
 
 </div>
+<script>
+const API_URL = "https://script.google.com/macros/s/AKfycbxcFcKBO39I7UibZoFiPz3a1TZIpXtN5kGK0XnFJu-P-yfMhpCcGCMZIE2LmGtnD-qFqw/exec";
 
+async function carregarPainel() {
+  try {
+    const resposta = await fetch(API_URL);
+    const dados = await resposta.json();
+
+    document.getElementById("totalCadastros").innerText = dados.total;
+
+    if (dados.ultimo) {
+      const data = new Date(dados.ultimo);
+      const texto = data.toLocaleDateString("pt-BR") + " " +
+                    data.toLocaleTimeString("pt-BR", {hour: "2-digit", minute: "2-digit"});
+      document.getElementById("ultimoCadastro").innerText = texto;
+    } else {
+      document.getElementById("ultimoCadastro").innerText = "--";
+    }
+
+  } catch (erro) {
+    document.getElementById("totalCadastros").innerText = "Erro";
+    document.getElementById("ultimoCadastro").innerText = "Erro";
+  }
+}
+
+carregarPainel();
+</script>
 </body>
 </html>
