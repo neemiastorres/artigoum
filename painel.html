@@ -143,6 +143,8 @@ tr:nth-child(even){
   color:white;
   margin-top:15px;
   transition:background .2s ease;
+  border:none;
+  cursor:pointer;
 }
 
 .btn-planilha{
@@ -161,6 +163,14 @@ tr:nth-child(even){
   background:#6BC74A;
 }
 
+.btn-sair{
+  background:#C0392B;
+}
+
+.btn-sair:hover{
+  background:#A93226;
+}
+
 .info{
   text-align:center;
   color:#666;
@@ -177,7 +187,6 @@ tr:nth-child(even){
 <div class="card">
 
 <div class="logo-container">
-  <!-- Corrigido o nome da imagem para o arquivo correspondente -->
   <img src="logo-a1.png" alt="Artigo Um" class="logo-img">
 </div>
 
@@ -243,6 +252,10 @@ Abrir Planilha Completa
 Voltar ao Aplicativo
 </a>
 
+<button class="btn btn-sair" onclick="fazerLogout()">
+Sair do Sistema
+</button>
+
 <div class="info">
 Os dados são atualizados diretamente da planilha oficial do Artigo Um.
 </div>
@@ -252,9 +265,28 @@ Os dados são atualizados diretamente da planilha oficial do Artigo Um.
 </div>
 
 <script>
+// 1. VERIFICAÇÃO DE SEGURANÇA (executada imediatamente)
+function verificarAutenticacao() {
+  const usuario = localStorage.getItem("usuarioLogado");
+  
+  // Se não houver login salvo, redireciona para o login
+  if (!usuario) {
+    window.location.href = "login.html"; // Se sua página de login for login.html
+  }
+}
+
+// Bloqueia a página na hora se o usuário não estiver logado
+verificarAutenticacao();
 
 const API_URL = "https://script.google.com/macros/s/AKfycbxcFcKBO39I7UibZoFiPz3a1TZIpXtN5kGK0XnFJu-P-yfMhpCcGCMZIE2LmGtnD-qFqw/exec";
 
+// 2. FUNÇÃO PARA DESLOGAR
+function fazerLogout() {
+  localStorage.removeItem("usuarioLogado");
+  window.location.href = "login.html";
+}
+
+// 3. CARREGAMENTO DOS DADOS DO PAINEL
 async function carregarPainel(){
 
   try{
