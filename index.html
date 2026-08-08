@@ -139,6 +139,14 @@
 
 <body>
 
+  <script>
+const usuario = JSON.parse(localStorage.getItem("usuarioLogado"));
+
+if (!usuario) {
+  window.location.href = "login.html";
+}
+</script>
+
   <div class="card">
 
     <div class="logo-container">
@@ -165,7 +173,7 @@
       Iniciar Cadastro
     </a>
 
-    <a class="btn btn-admin" href="painel.html">
+  <a class="btn btn-admin" href="login.html">
   Área Administrativa
 </a>
 
