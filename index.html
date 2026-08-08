@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Artigo Um | Tela Inicial</title>
+<title>Artigo Um | Tela Inicial e Cadastro</title>
 
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-512.png">
@@ -29,7 +29,7 @@ body{
 
 .card{
   width:100%;
-  max-width:420px;
+  max-width:500px;
   background:#ffffff;
   border-radius:22px;
   box-shadow:0 12px 30px rgba(0,0,0,0.12);
@@ -63,7 +63,27 @@ h1{
   color:#555;
   font-size:16px;
   font-weight:600;
-  margin-bottom:30px;
+  margin-bottom:20px;
+}
+
+.info-box{
+  background:#eef4ff;
+  border-left:4px solid #0B1F3A;
+  padding:15px;
+  border-radius:8px;
+  text-align:left;
+  font-size:14px;
+  line-height:1.5;
+  color:#333;
+  margin-bottom:25px;
+}
+
+.info-box p{
+  margin-bottom:8px;
+}
+
+.info-box p:last-child{
+  margin-bottom:0;
 }
 
 .btn{
@@ -78,6 +98,8 @@ h1{
   margin-bottom:15px;
   transition:background .2s ease, transform .1s ease;
   text-align:center;
+  border:none;
+  cursor:pointer;
 }
 
 .btn:active{
@@ -104,6 +126,7 @@ h1{
   margin-top:25px;
   font-size:13px;
   color:#777;
+  line-height:1.4;
 }
 </style>
 
@@ -117,17 +140,28 @@ h1{
   </div>
 
   <h1>Artigo Um</h1>
-  <div class="subtitle">Sistema de Cadastro Geral</div>
+  <div class="subtitle">Sistema de Cadastro Geral e Gestão</div>
 
+  <!-- Bloco com os textos informativos necessários -->
+  <div class="info-box">
+    <p><strong>Bem-vindo ao aplicativo oficial do Artigo Um!</strong></p>
+    <p>Este sistema é destinado ao registro geral de apoiadores, coordenadores e participantes da nossa rede.</p>
+    <p>• Para realizar ou atualizar o seu cadastro, utilize o botão verde abaixo.</p>
+    <p>• O acesso ao painel administrativo é restrito à equipe autorizada.</p>
+  </div>
+
+  <!-- Ações e Navegação -->
   <a href="cadastro.html" class="btn btn-cadastro">Fazer Novo Cadastro</a>
   <a href="login.html" class="btn btn-login">Área Administrativa</a>
 
   <div class="footer-info">
-    Aplicativo Oficial - Artigo Um
+    Artigo Um — Todos os direitos reservados.<br>
+    Seus dados estão protegidos de acordo com a LGPD.
   </div>
 
 </div>
 
+<!-- Registro do Service Worker para suporte a aplicativo (PWA) -->
 <script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
