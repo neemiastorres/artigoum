@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
@@ -59,6 +58,10 @@ input,select{
   border:1px solid #ccc;
   border-radius:10px;
   font-size:16px;
+  outline:none;
+}
+input:focus, select:focus{
+  border-color:#0B1F3A;
 }
 .checkbox{
   display:flex;
@@ -90,6 +93,92 @@ button{
   font-weight:bold;
   color:#0B1F3A;
 }
+
+/* Modal de Sucesso/Alerta em Destaque */
+.modal-sucesso {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(11, 31, 58, 0.85);
+  z-index: 9999;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.modal-sucesso.ativo {
+  display: flex;
+  animation: popIn 0.3s ease-out forwards;
+}
+
+.modal-conteudo {
+  background: #ffffff;
+  padding: 35px 25px;
+  border-radius: 20px;
+  text-align: center;
+  max-width: 420px;
+  width: 100%;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+}
+
+.icone-sucesso {
+  width: 75px;
+  height: 75px;
+  background: #7ED957;
+  color: #ffffff;
+  font-size: 42px;
+  font-weight: bold;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 20px;
+}
+
+.icone-erro {
+  background: #C0392B !important;
+}
+
+.modal-conteudo h2 {
+  color: #0B1F3A;
+  font-size: 28px;
+  margin-bottom: 12px;
+  font-weight: bold;
+}
+
+.modal-conteudo p {
+  color: #555555;
+  font-size: 16px;
+  line-height: 1.4;
+  margin-bottom: 25px;
+}
+
+.btn-fechar-modal {
+  width: 100%;
+  background: #0B1F3A;
+  color: #ffffff;
+  border: none;
+  padding: 15px;
+  border-radius: 10px;
+  font-size: 17px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 0;
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
 </style>
 
 </head>
@@ -114,7 +203,7 @@ button{
 
 <label>Seção Eleitoral</label> <input type="text" id="secao">
 
-<label>CPF</label> <input type="text" id="cpf">
+<label>CPF</label> <input type="text" id="cpf" placeholder="000.000.000-00" maxlength="14">
 
 <label>Data de nascimento *</label> <input type="date" id="nascimento" required>
 
@@ -123,7 +212,6 @@ button{
 <label>Nome do pai</label> <input type="text" id="pai">
 
 <label>Estado civil</label> <select id="estadoCivil">
-
 <option value="">Selecione</option>
 <option>Solteiro(a)</option>
 <option>Casado(a)</option>
@@ -133,7 +221,6 @@ button{
 </select>
 
 <label>Gênero</label> <select id="genero">
-
 <option value="">Selecione</option>
 <option>Masculino</option>
 <option>Feminino</option>
@@ -143,7 +230,7 @@ button{
 
 <div class="section">Endereço</div>
 
-<label>CEP</label> <input type="text" id="cep">
+<label>CEP</label> <input type="text" id="cep" placeholder="00000-000" maxlength="9">
 
 <label>Endereço *</label> <input type="text" id="endereco" required>
 
@@ -159,9 +246,9 @@ button{
 
 <div class="section">Contato</div>
 
-<label>Telefone</label> <input type="text" id="telefone">
+<label>Telefone</label> <input type="text" id="telefone" placeholder="(00) 0000-0000" maxlength="14">
 
-<label>WhatsApp *</label> <input type="text" id="whatsapp" required>
+<label>WhatsApp *</label> <input type="text" id="whatsapp" placeholder="(00) 00000-0000" maxlength="15" required>
 
 <label>E-mail *</label> <input type="email" id="email" required>
 
@@ -186,9 +273,112 @@ Limpar Cadastros Pendentes
 
 </div>
 
+<!-- Pop-up Modal de Sucesso/Alerta em Destaque -->
+<div id="modalSucesso" class="modal-sucesso">
+  <div class="modal-conteudo">
+    <div class="icone-sucesso" id="iconeModal">✓</div>
+    <h2 id="tituloModal">Cadastro Concluído!</h2>
+    <p id="msgModal">Seu cadastro foi realizado com sucesso.</p>
+    <button type="button" class="btn-fechar-modal" onclick="fecharModalSucesso()">Continuar</button>
+  </div>
+</div>
+
 <script>
 const API_URL = "https://script.google.com/macros/s/AKfycbxcFcKBO39I7UibZoFiPz3a1TZIpXtN5kGK0XnFJu-P-yfMhpCcGCMZIE2LmGtnD-qFqw/exec";
 
+/* VALIDAÇÃO MATEMÁTICA DE CPF */
+function validarCPF(cpf) {
+  cpf = cpf.replace(/[^\d]+/g, '');
+  if (cpf === '') return true; // Se o campo for opcional e estiver vazio, ignora
+  if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) return false;
+
+  let soma = 0;
+  let resto;
+
+  for (let i = 1; i <= 9; i++) {
+    soma += parseInt(cpf.substring(i - 1, i)) * (11 - i);
+  }
+  resto = (soma * 10) % 11;
+  if ((resto === 10) || (resto === 11)) resto = 0;
+  if (resto !== parseInt(cpf.substring(9, 10))) return false;
+
+  soma = 0;
+  for (let i = 1; i <= 10; i++) {
+    soma += parseInt(cpf.substring(i - 1, i)) * (12 - i);
+  }
+  resto = (soma * 10) % 11;
+  if ((resto === 10) || (resto === 11)) resto = 0;
+  if (resto !== parseInt(cpf.substring(10, 11))) return false;
+
+  return true;
+}
+
+/* MÁSCARAS AUTOMÁTICAS */
+function aplicarMascaraCPF(v){
+  v = v.replace(/\D/g, "");
+  v = v.replace(/(\d{3})(\d)/, "$1.$2");
+  v = v.replace(/(\d{3})(\d)/, "$1.$2");
+  v = v.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+  return v;
+}
+
+function aplicarMascaraTelefone(v){
+  v = v.replace(/\D/g, "");
+  v = v.replace(/^(\d{2})(\d)/g, "($1) $2");
+  v = v.replace(/(\d{4})(\d)/, "$1-$2");
+  return v;
+}
+
+function aplicarMascaraCelular(v){
+  v = v.replace(/\D/g, "");
+  v = v.replace(/^(\d{2})(\d)/g, "($1) $2");
+  v = v.replace(/(\d{5})(\d)/, "$1-$2");
+  return v;
+}
+
+function aplicarMascaraCEP(v){
+  v = v.replace(/\D/g, "");
+  v = v.replace(/^(\d{5})(\d)/, "$1-$2");
+  return v;
+}
+
+/* OUVINTES DE MÁSCARA NOS INPUTS */
+document.getElementById("cpf").addEventListener("input", function(e){
+  e.target.value = aplicarMascaraCPF(e.target.value);
+});
+
+document.getElementById("whatsapp").addEventListener("input", function(e){
+  e.target.value = aplicarMascaraCelular(e.target.value);
+});
+
+document.getElementById("telefone").addEventListener("input", function(e){
+  e.target.value = aplicarMascaraTelefone(e.target.value);
+});
+
+document.getElementById("cep").addEventListener("input", function(e){
+  e.target.value = aplicarMascaraCEP(e.target.value);
+});
+
+/* BUSCA AUTOMÁTICA DE ENDEREÇO PELO CEP */
+document.getElementById("cep").addEventListener("blur", async function(e){
+  const cep = e.target.value.replace(/\D/g, "");
+  if(cep.length === 8){
+    try {
+      const res = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+      const data = await res.json();
+      if(!data.erro){
+        document.getElementById("endereco").value = data.logradouro || "";
+        document.getElementById("bairro").value = data.bairro || "";
+        document.getElementById("cidade").value = data.localidade || "";
+        document.getElementById("estado").value = data.uf || "";
+      }
+    } catch(err){
+      console.log("Erro ao buscar CEP:", err);
+    }
+  }
+});
+
+/* GERENCIAMENTO DE CADASTROS */
 function getPendentes(){
   return JSON.parse(localStorage.getItem("cadastrosPendentes") || "[]");
 }
@@ -242,29 +432,55 @@ async function enviarCadastro(cadastro){
   });
 }
 
+function exibirModal(titulo, mensagemTexto, tipo = "sucesso") {
+  const iconeEl = document.getElementById("iconeModal");
+  const tituloEl = document.getElementById("tituloModal");
+  const msgEl = document.getElementById("msgModal");
+
+  tituloEl.innerText = titulo;
+  msgEl.innerText = mensagemTexto;
+
+  if (tipo === "erro") {
+    iconeEl.innerText = "✕";
+    iconeEl.classList.add("icone-erro");
+  } else {
+    iconeEl.innerText = "✓";
+    iconeEl.classList.remove("icone-erro");
+  }
+
+  document.getElementById("modalSucesso").classList.add("ativo");
+}
+
+function fecharModalSucesso(){
+  document.getElementById("modalSucesso").classList.remove("ativo");
+}
+
 document.getElementById("cadastroForm").addEventListener("submit", async function(e){
   e.preventDefault();
+
+  const cpfValue = document.getElementById("cpf").value;
+  if (!validarCPF(cpfValue)) {
+    exibirModal("CPF Inválido", "Por favor, verifique o número do CPF digitado.", "erro");
+    return;
+  }
 
   const cadastro = obterCadastro();
 
   if(navigator.onLine){
     try{
       await enviarCadastro(cadastro);
-      document.getElementById("status").innerHTML =
-        "Cadastro enviado com sucesso.";
+      exibirModal("Cadastro Concluído!", "Cadastro enviado com sucesso para o servidor!", "sucesso");
     }catch(err){
       const pendentes = getPendentes();
       pendentes.push(cadastro);
       setPendentes(pendentes);
-      document.getElementById("status").innerHTML =
-        "Sem comunicação com o servidor. Cadastro salvo no aparelho.";
+      exibirModal("Salvo no Aparelho", "Sem comunicação com o servidor. Cadastro salvo no aparelho!", "sucesso");
     }
   }else{
     const pendentes = getPendentes();
     pendentes.push(cadastro);
     setPendentes(pendentes);
-    document.getElementById("status").innerHTML =
-      "Sem internet. Cadastro salvo no aparelho.";
+    exibirModal("Salvo Offline", "Sem internet no momento. Cadastro salvo no aparelho!", "sucesso");
   }
 
   this.reset();
@@ -302,9 +518,7 @@ async function enviarPendentes(){
   setPendentes(restantes);
   atualizarStatusSync();
 
-  document.getElementById("status").innerHTML =
-    enviados + " cadastro(s) enviado(s). " +
-    restantes.length + " pendente(s).";
+  exibirModal("Sincronização Concluída", enviados + " cadastro(s) pendente(s) enviado(s) com sucesso!", "sucesso");
 }
 
 function limparPendentes(){
