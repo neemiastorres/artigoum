@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Artigo Um | Login Administrativo</title>
+
+  <meta name="theme-color" content="#0B1F3A">
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
+
+    body{
+      font-family:Arial, Helvetica, sans-serif;
+      background:#f4f6f9;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      min-height:100vh;
+      padding:20px;
+      color:#333;
+    }
+
+    .card{
+      width:100%;
+      max-width:420px;
+      background:#ffffff;
+      border-radius:22px;
+      box-shadow:0 12px 30px rgba(0,0,0,0.12);
+      padding:36px 26px;
+      text-align:center;
+    }
+
+    .logo-container{
+      width:100%;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      margin-bottom:18px;
+    }
+
+    .logo{
+      width:220px;
+      max-width:100%;
+      height:auto;
+      display:block;
+    }
+
+    h1{
+      color:#0B1F3A;
+      font-size:30px;
+      font-weight:700;
+      margin-bottom:8px;
+    }
+
+    .subtitle{
+      color:#555;
+      font-size:18px;
+      font-weight:600;
+      margin-bottom:24px;
+    }
+
+    .field{
+      text-align:left;
+      margin-bottom:18px;
+    }
+
+    label{
+      display:block;
+      margin-bottom:8px;
+      font-weight:bold;
+      color:#0B1F3A;
+    }
+
+    input{
+      width:100%;
+      padding:14px;
+      border:1px solid #ccc;
+      border-radius:10px;
+      font-size:16px;
+    }
+
+    .btn{
+      display:block;
+      width:100%;
+      border:none;
+      cursor:pointer;
+      text-decoration:none;
+      color:#fff;
+      font-size:17px;
+      font-weight:700;
+      padding:15px;
+      border-radius:12px;
+      margin-top:10px;
+      background:#0B1F3A;
+      transition:background .2s ease;
+    }
+
+    .btn:hover{
+      background:#13305c;
+    }
+
+    .btn-voltar{
+      display:block;
+      margin-top:18px;
+      text-decoration:none;
+      color:#0B1F3A;
+      font-weight:bold;
+    }
+
+    .mensagem{
+      margin-top:18px;
+      font-size:15px;
+      font-weight:bold;
+      color:#C0392B;
+      min-height:22px;
+    }
+  </style>
+
+</head>
+
+<body>
+
+<div class="card">
+
+  <div class="logo-container">
+    <img src="logo-a1.png" alt="Logo Artigo Um" class="logo">
+  </div>
+
+  <h1>Área Administrativa</h1>
+  <div class="subtitle">Acesso restrito a administradores e coordenadores</div>
+
+  <div class="field">
+    <label for="email">E-mail</label>
+    <input type="email" id="email" placeholder="admin@artigoum.org">
+  </div>
+
+  <div class="field">
+    <label for="senha">Senha</label>
+    <input type="password" id="senha" placeholder="Sua senha">
+  </div>
+
+<button class="btn" onclick="entrar()">Entrar</button>
+
+  <div class="mensagem" id="mensagem"></div>
+
+<a class="btn-voltar" href="index.html">Voltar ao aplicativo</a>
+
+</div>
+
+<script>
+
+const API_URL = "https://script.google.com/macros/s/AKfycbxcFcKBO39I7UibZoFiPz3a1TZIpXtN5kGK0XnFJu-P-yfMhpCcGCMZIE2LmGtnD-qFqw/exec";
+
+async function entrar(){
+
+  const email = document.getElementById("email").value.trim();
+  const senha = document.getElementById("senha").value.trim();
+
+  if(email === "" || senha === ""){
+
+    document.getElementById("mensagem").innerText =
+      "Informe e-mail e senha.";
+
+    return;
+
+  }
+
+  try{
+
+    const url =
+      API_URL +
+      "?login=1&email=" + encodeURIComponent(email) +
+      "&senha=" + encodeURIComponent(senha);
+
+    const resposta = await fetch(url);
+    const dados = await resposta.json();
+
+    if(dados.status === "ok"){
+
+      localStorage.setItem("usuarioLogado", JSON.stringify({
+        email: email,
+        perfil: dados.perfil,
+        estados: dados.estados
+      }));
+
+      window.location.href = "painel.html";
+
+    }else{
+
+      document.getElementById("mensagem").innerText =
+        "Usuário ou senha inválidos.";
+
+    }
+
+  }catch(e){
+
+    document.getElementById("mensagem").innerText =
+      "Erro ao conectar com o servidor.";
+
+  }
+
+}
+
+document.getElementById("senha").addEventListener("keydown", function(event){
+
+  if(event.key === "Enter"){
+    entrar();
+  }
+
+});
+
+</script>
+
+</body>
+</html>
