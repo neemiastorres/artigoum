@@ -83,6 +83,11 @@ button{
   font-size:17px;
   font-weight:bold;
   cursor:pointer;
+  transition: opacity 0.2s ease, background 0.2s ease;
+}
+button:disabled{
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 #btnSalvar{background:#7ED957}
 #btnEnviar{background:#0B1F3A}
@@ -289,7 +294,7 @@ const API_URL = "https://script.google.com/macros/s/AKfycbxcFcKBO39I7UibZoFiPz3a
 /* VALIDAÇÃO MATEMÁTICA DE CPF */
 function validarCPF(cpf) {
   cpf = cpf.replace(/[^\d]+/g, '');
-  if (cpf === '') return true; // Se o campo for opcional e estiver vazio, ignora
+  if (cpf === '') return true;
   if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) return false;
 
   let soma = 0;
@@ -458,36 +463,50 @@ function fecharModalSucesso(){
 document.getElementById("cadastroForm").addEventListener("submit", async function(e){
   e.preventDefault();
 
+  const btnSalvar = document.getElementById("btnSalvar");
   const cpfValue = document.getElementById("cpf").value;
+
   if (!validarCPF(cpfValue)) {
     exibirModal("CPF Inválido", "Por favor, verifique o número do CPF digitado.", "erro");
     return;
   }
 
+  // DESABILITA O BOTÃO DURANTE O PROCESSAMENTO
+  btnSalvar.disabled = true;
+  btnSalvar.innerText = "Enviando...";
+
   const cadastro = obterCadastro();
 
-  if(navigator.onLine){
-    try{
-      await enviarCadastro(cadastro);
-      exibirModal("Cadastro Concluído!", "Cadastro enviado com sucesso para o servidor!", "sucesso");
-    }catch(err){
+  try {
+    if(navigator.onLine){
+      try{
+        await enviarCadastro(cadastro);
+        exibirModal("Cadastro Concluído!", "Cadastro enviado com sucesso para o servidor!", "sucesso");
+        this.reset();
+      }catch(err){
+        const pendentes = getPendentes();
+        pendentes.push(cadastro);
+        setPendentes(pendentes);
+        exibirModal("Salvo no Aparelho", "Sem comunicação com o servidor. Cadastro salvo no aparelho!", "sucesso");
+        this.reset();
+      }
+    }else{
       const pendentes = getPendentes();
       pendentes.push(cadastro);
       setPendentes(pendentes);
-      exibirModal("Salvo no Aparelho", "Sem comunicação com o servidor. Cadastro salvo no aparelho!", "sucesso");
+      exibirModal("Salvo Offline", "Sem internet no momento. Cadastro salvo no aparelho!", "sucesso");
+      this.reset();
     }
-  }else{
-    const pendentes = getPendentes();
-    pendentes.push(cadastro);
-    setPendentes(pendentes);
-    exibirModal("Salvo Offline", "Sem internet no momento. Cadastro salvo no aparelho!", "sucesso");
+  } finally {
+    // REABILITA O BOTÃO AO FINALIZAR
+    btnSalvar.disabled = false;
+    btnSalvar.innerText = "Salvar Cadastro";
+    atualizarStatusSync();
   }
-
-  this.reset();
-  atualizarStatusSync();
 });
 
 async function enviarPendentes(){
+  const btnEnviar = document.getElementById("btnEnviar");
 
   if(!navigator.onLine){
     document.getElementById("status").innerHTML =
@@ -503,6 +522,9 @@ async function enviarPendentes(){
     return;
   }
 
+  btnEnviar.disabled = true;
+  btnEnviar.innerText = "Sincronizando...";
+
   let enviados = 0;
   let restantes = [];
 
@@ -517,6 +539,9 @@ async function enviarPendentes(){
 
   setPendentes(restantes);
   atualizarStatusSync();
+
+  btnEnviar.disabled = false;
+  btnEnviar.innerText = "Enviar Cadastros Pendentes";
 
   exibirModal("Sincronização Concluída", enviados + " cadastro(s) pendente(s) enviado(s) com sucesso!", "sucesso");
 }
