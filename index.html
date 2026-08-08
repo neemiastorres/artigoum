@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Artigo Um | Tela Inicial e Cadastro</title>
+<title>Artigo Um | Tela Inicial e Orientações</title>
 
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-512.png">
@@ -27,9 +27,9 @@ body{
   color:#333;
 }
 
-.card{
+.container{
   width:100%;
-  max-width:500px;
+  max-width:560px;
   background:#ffffff;
   border-radius:22px;
   box-shadow:0 12px 30px rgba(0,0,0,0.12);
@@ -63,27 +63,72 @@ h1{
   color:#555;
   font-size:16px;
   font-weight:600;
-  margin-bottom:20px;
+  margin-bottom:24px;
 }
 
-.info-box{
+.info-card{
+  background:#f8f9fb;
+  border:1px solid #e1e6ed;
+  border-radius:14px;
+  padding:20px;
+  text-align:left;
+  margin-bottom:24px;
+}
+
+.info-card h2{
+  color:#0B1F3A;
+  font-size:18px;
+  margin-bottom:12px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.info-card p{
+  font-size:14px;
+  color:#555;
+  line-height:1.6;
+  margin-bottom:12px;
+}
+
+.info-card p:last-child{
+  margin-bottom:0;
+}
+
+.info-list{
+  list-style:none;
+  padding:0;
+  margin:12px 0;
+}
+
+.info-list li{
+  font-size:14px;
+  color:#444;
+  line-height:1.5;
+  margin-bottom:10px;
+  padding-left:20px;
+  position:relative;
+}
+
+.info-list li::before{
+  content:"•";
+  color:#0B1F3A;
+  font-weight:bold;
+  font-size:18px;
+  position:absolute;
+  left:0;
+  top:-2px;
+}
+
+.alert-box{
   background:#eef4ff;
   border-left:4px solid #0B1F3A;
-  padding:15px;
+  padding:12px 16px;
   border-radius:8px;
-  text-align:left;
-  font-size:14px;
-  line-height:1.5;
-  color:#333;
-  margin-bottom:25px;
-}
-
-.info-box p{
-  margin-bottom:8px;
-}
-
-.info-box p:last-child{
-  margin-bottom:0;
+  font-size:13px;
+  color:#0B1F3A;
+  font-weight:600;
+  margin-top:12px;
 }
 
 .btn{
@@ -95,11 +140,9 @@ h1{
   font-weight:700;
   padding:16px;
   border-radius:12px;
-  margin-bottom:15px;
+  margin-bottom:14px;
   transition:background .2s ease, transform .1s ease;
   text-align:center;
-  border:none;
-  cursor:pointer;
 }
 
 .btn:active{
@@ -123,9 +166,9 @@ h1{
 }
 
 .footer-info{
-  margin-top:25px;
-  font-size:13px;
-  color:#777;
+  margin-top:20px;
+  font-size:12px;
+  color:#888;
   line-height:1.4;
 }
 </style>
@@ -133,35 +176,43 @@ h1{
 </head>
 <body>
 
-<div class="card">
+<div class="container">
 
   <div class="logo-container">
     <img src="logo-a1.png" alt="Logo Artigo Um" class="logo">
   </div>
 
   <h1>Artigo Um</h1>
-  <div class="subtitle">Sistema de Cadastro Geral e Gestão</div>
+  <div class="subtitle">Sistema de Cadastro Geral Oficial</div>
 
-  <!-- Bloco com os textos informativos necessários -->
-  <div class="info-box">
-    <p><strong>Bem-vindo ao aplicativo oficial do Artigo Um!</strong></p>
-    <p>Este sistema é destinado ao registro geral de apoiadores, coordenadores e participantes da nossa rede.</p>
-    <p>• Para realizar ou atualizar o seu cadastro, utilize o botão verde abaixo.</p>
-    <p>• O acesso ao painel administrativo é restrito à equipe autorizada.</p>
+  <!-- Bloco com os textos informativos completos -->
+  <div class="info-card">
+    <h2>Informações Gerais</h2>
+    <p>Seja bem-vindo ao aplicativo oficial do <strong>Artigo Um</strong>. Esta plataforma foi desenvolvida para organizar e gerenciar os dados dos participantes e apoiadores de forma simples e segura.</p>
+
+    <ul class="info-list">
+      <li><strong>Formulário de Cadastro:</strong> Destinado ao preenchimento dos seus dados pessoais, endereço e contato. O processo é rápido e não necessita de login.</li>
+      <li><strong>Funcionamento Offline:</strong> Caso você esteja sem conexão com a internet, seus dados serão salvos com segurança no dispositivo e poderão ser enviados assim que a conexão for reestabelecida.</li>
+      <li><strong>Área Administrativa:</strong> Acesso restrito e exclusivo para administradores e coordenadores autorizados realizarem a consulta e gestão dos cadastros.</li>
+    </ul>
+
+    <div class="alert-box">
+      🔒 Seus dados estão protegidos de acordo com as diretrizes da Lei Geral de Proteção de Dados (LGPD).
+    </div>
   </div>
 
-  <!-- Ações e Navegação -->
+  <!-- Botões de Ação e Navegação -->
   <a href="cadastro.html" class="btn btn-cadastro">Fazer Novo Cadastro</a>
   <a href="login.html" class="btn btn-login">Área Administrativa</a>
 
   <div class="footer-info">
     Artigo Um — Todos os direitos reservados.<br>
-    Seus dados estão protegidos de acordo com a LGPD.
+    Aplicativo Oficial otimizado para celulares e computadores.
   </div>
 
 </div>
 
-<!-- Registro do Service Worker para suporte a aplicativo (PWA) -->
+<!-- Registro do Service Worker (PWA) -->
 <script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
