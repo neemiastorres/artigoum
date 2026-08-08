@@ -73,7 +73,8 @@ input:focus, select:focus{
   width:auto;
   margin-top:4px;
 }
-button{
+button, .btn-link{
+  display:block;
   width:100%;
   padding:15px;
   margin-top:18px;
@@ -83,6 +84,8 @@ button{
   font-size:17px;
   font-weight:bold;
   cursor:pointer;
+  text-align:center;
+  text-decoration:none;
   transition: opacity 0.2s ease, background 0.2s ease;
 }
 button:disabled{
@@ -92,6 +95,14 @@ button:disabled{
 #btnSalvar{background:#7ED957}
 #btnEnviar{background:#0B1F3A}
 #btnLimpar{background:#E67E22}
+
+.btn-voltar{
+  background:#7ED957;
+}
+.btn-voltar:hover{
+  background:#6BC74A;
+}
+
 .status{
   margin-top:18px;
   text-align:center;
@@ -210,7 +221,7 @@ button:disabled{
 
 <label>CPF</label> <input type="text" id="cpf" placeholder="000.000.000-00" maxlength="14">
 
-<label>Data de nascimento *</label> <input type="date" id="nascimento" required>
+<label>Data de nascimento *</label> <input type="date" id="nascimento" min="1900-01-01" required>
 
 <label>Nome da mãe *</label> <input type="text" id="mae" required>
 
@@ -274,6 +285,11 @@ Enviar Cadastros Pendentes
 Limpar Cadastros Pendentes
 </button>
 
+<!-- Botão adicionado para voltar à Tela Inicial -->
+<a class="btn-link btn-voltar" href="index.html">
+Voltar ao Aplicativo
+</a>
+
 <div class="status" id="status"></div>
 
 </div>
@@ -290,6 +306,26 @@ Limpar Cadastros Pendentes
 
 <script>
 const API_URL = "https://script.google.com/macros/s/AKfycbxcFcKBO39I7UibZoFiPz3a1TZIpXtN5kGK0XnFJu-P-yfMhpCcGCMZIE2LmGtnD-qFqw/exec";
+
+// DEFINE A DATA MÁXIMA DO CALENDÁRIO COMO HOJE
+const hoje = new Date().toISOString().split("T")[0];
+document.getElementById("nascimento").setAttribute("max", hoje);
+
+/* VALIDAÇÃO DE DATA DE NASCIMENTO */
+function validarDataNascimento(dataString) {
+  if (!dataString) return false;
+
+  const dataDigitada = new Date(dataString + "T00:00:00");
+  const dataHoje = new Date();
+  dataHoje.setHours(23, 59, 59, 999);
+
+  const anoDigitado = dataDigitada.getFullYear();
+
+  if (anoDigitado < 1900 || dataDigitada > dataHoje) {
+    return false;
+  }
+  return true;
+}
 
 /* VALIDAÇÃO MATEMÁTICA DE CPF */
 function validarCPF(cpf) {
@@ -465,13 +501,18 @@ document.getElementById("cadastroForm").addEventListener("submit", async functio
 
   const btnSalvar = document.getElementById("btnSalvar");
   const cpfValue = document.getElementById("cpf").value;
+  const dataNascValue = document.getElementById("nascimento").value;
+
+  if (!validarDataNascimento(dataNascValue)) {
+    exibirModal("Data Inválida", "Por favor, selecione uma data de nascimento válida (entre 1900 e hoje).", "erro");
+    return;
+  }
 
   if (!validarCPF(cpfValue)) {
     exibirModal("CPF Inválido", "Por favor, verifique o número do CPF digitado.", "erro");
     return;
   }
 
-  // DESABILITA O BOTÃO DURANTE O PROCESSAMENTO
   btnSalvar.disabled = true;
   btnSalvar.innerText = "Enviando...";
 
@@ -498,7 +539,6 @@ document.getElementById("cadastroForm").addEventListener("submit", async functio
       this.reset();
     }
   } finally {
-    // REABILITA O BOTÃO AO FINALIZAR
     btnSalvar.disabled = false;
     btnSalvar.innerText = "Salvar Cadastro";
     atualizarStatusSync();
@@ -558,6 +598,9 @@ window.addEventListener("offline", atualizarStatusSync);
 
 atualizarStatusSync();
 </script>
+
+</body>
+</html>
 
 </body>
 </html>
