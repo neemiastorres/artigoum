@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
@@ -99,6 +98,11 @@ h1{
   border:1px solid #ccc;
   border-radius:10px;
   font-size:16px;
+  outline:none;
+}
+
+.search input:focus{
+  border-color:#0B1F3A;
 }
 
 .table-container{
@@ -138,6 +142,7 @@ tr:nth-child(even){
   font-weight:bold;
   color:white;
   margin-top:15px;
+  transition:background .2s ease;
 }
 
 .btn-planilha{
@@ -172,7 +177,8 @@ tr:nth-child(even){
 <div class="card">
 
 <div class="logo-container">
-  <img src="logo-artigoum.png" alt="Artigo Um" class="logo-img">
+  <!-- Corrigido o nome da imagem para o arquivo correspondente -->
+  <img src="logo-a1.png" alt="Artigo Um" class="logo-img">
 </div>
 
 <h1>Painel Administrativo</h1>
@@ -230,15 +236,11 @@ Digite um termo de pesquisa acima.
 <a class="btn btn-planilha"
 href="https://docs.google.com/spreadsheets/d/1MfJafyeYJ56SfrwJcSPc__0SsGHTe8dwMl5GEuFhR_Y/edit?resourcekey=&gid=1422780254#gid=1422780254"
 target="_blank">
-
 Abrir Planilha Completa
-
 </a>
 
 <a class="btn btn-voltar" href="index.html">
-
 Voltar ao Aplicativo
-
 </a>
 
 <div class="info">
@@ -255,92 +257,93 @@ const API_URL = "https://script.google.com/macros/s/AKfycbxcFcKBO39I7UibZoFiPz3a
 
 async function carregarPainel(){
 
-try{
+  try{
 
-const resposta = await fetch(API_URL + "?t=" + new Date().getTime());
-const dados = await resposta.json();
+    const resposta = await fetch(API_URL + "?t=" + new Date().getTime(), {
+      method: "GET",
+      redirect: "follow"
+    });
+    
+    if(!resposta.ok) throw new Error("Erro na rede ao carregar painel");
 
-document.getElementById("totalCadastros").innerText = dados.total;
+    const dados = await resposta.json();
 
-if(dados.ultimo){
+    document.getElementById("totalCadastros").innerText = dados.total ?? "0";
 
-const data = new Date(dados.ultimo);
+    if(dados.ultimo){
+      const data = new Date(dados.ultimo);
+      document.getElementById("ultimoCadastro").innerText =
+        data.toLocaleDateString("pt-BR") + " " +
+        data.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});
+    }
 
-document.getElementById("ultimoCadastro").innerText =
-data.toLocaleDateString("pt-BR") + " " +
-data.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});
-
-}
-
-}catch(e){
-
-document.getElementById("totalCadastros").innerText = "Erro";
-document.getElementById("ultimoCadastro").innerText = "Erro";
-
-}
+  }catch(e){
+    console.error("Erro ao carregar dados do painel:", e);
+    document.getElementById("totalCadastros").innerText = "Erro";
+    document.getElementById("ultimoCadastro").innerText = "Erro";
+  }
 
 }
 
 async function pesquisar(){
 
-const termo = document.getElementById("pesquisa").value.trim();
+  const termo = document.getElementById("pesquisa").value.trim();
+  const tbody = document.getElementById("tabelaResultados");
 
-const tbody = document.getElementById("tabelaResultados");
+  if(termo === ""){
+    tbody.innerHTML =
+    '<tr><td colspan="7" style="text-align:center;">Digite um termo de pesquisa acima.</td></tr>';
+    return;
+  }
 
-if(termo === ""){
+  try{
 
-tbody.innerHTML =
-'<tr><td colspan="7" style="text-align:center;">Digite um termo de pesquisa acima.</td></tr>';
+    const resposta = await fetch(API_URL + "?q=" + encodeURIComponent(termo), {
+      method: "GET",
+      redirect: "follow"
+    });
 
-return;
+    if(!resposta.ok) throw new Error("Erro na busca");
+
+    const dados = await resposta.json();
+
+    if(!dados.resultados || dados.resultados.length === 0){
+      tbody.innerHTML =
+      '<tr><td colspan="7" style="text-align:center;">Nenhum cadastro encontrado.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = "";
+
+    dados.resultados.forEach(function(item){
+
+      const data = new Date(item.data);
+      const dataFormatada = isNaN(data) ? item.data : data.toLocaleDateString('pt-BR');
+
+      const linha =
+      `<tr>
+      <td>${dataFormatada || ''}</td>
+      <td>${item.nome || ''}</td>
+      <td>${item.bairro || ''}</td>
+      <td>${item.cidade || ''}</td>
+      <td>${item.estado || ''}</td>
+      <td>${item.whatsapp || ''}</td>
+      <td>${item.email || ''}</td>
+      </tr>`;
+
+      tbody.innerHTML += linha;
+
+    });
+
+  }catch(e){
+    console.error("Erro na pesquisa:", e);
+    tbody.innerHTML =
+    '<tr><td colspan="7" style="text-align:center;">Erro ao consultar os dados.</td></tr>';
+  }
 
 }
 
-try{
-
-const resposta = await fetch(API_URL + "?q=" + encodeURIComponent(termo));
-const dados = await resposta.json();
-
-if(!dados.resultados || dados.resultados.length === 0){
-
-tbody.innerHTML =
-'<tr><td colspan="7" style="text-align:center;">Nenhum cadastro encontrado.</td></tr>';
-
-return;
-
-}
-
-tbody.innerHTML = "";
-
-dados.resultados.forEach(function(item){
-
-const data = new Date(item.data);
-
-const linha =
-`<tr>
-<td>${data.toLocaleDateString('pt-BR')}</td>
-<td>${item.nome || ''}</td>
-<td>${item.bairro || ''}</td>
-<td>${item.cidade || ''}</td>
-<td>${item.estado || ''}</td>
-<td>${item.whatsapp || ''}</td>
-<td>${item.email || ''}</td>
-</tr>`;
-
-tbody.innerHTML += linha;
-
-});
-
-}catch(e){
-
-tbody.innerHTML =
-'<tr><td colspan="7" style="text-align:center;">Erro ao consultar os dados.</td></tr>';
-
-}
-
-}
-
-document.getElementById("pesquisa").addEventListener("input",pesquisar);
+document.getElementById("pesquisa").addEventListener("input", pesquisar);
 
 carregarPainel();
 
@@ -348,4 +351,3 @@ carregarPainel();
 
 </body>
 </html>
-
