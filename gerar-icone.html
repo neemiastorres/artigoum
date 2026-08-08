@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Gerador de Ícone PWA - Artigo Um</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f9;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+    .box {
+      background: #fff;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    canvas {
+      border: 2px solid #ccc;
+      border-radius: 12px;
+      margin-bottom: 20px;
+    }
+    button {
+      background: #0B1F3A;
+      color: #fff;
+      border: none;
+      padding: 14px 24px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #13305c;
+    }
+  </style>
+</head>
+<body>
+
+<div class="box">
+  <h2>Ícone Gerado para o PWA (512x512)</h2>
+  <canvas id="pwaCanvas" width="512" height="512"></canvas>
+  <br>
+  <button onclick="baixarIcone()">Baixar Ícone Quadrado (icon-512.png)</button>
+</div>
+
+<script>
+  const canvas = document.getElementById("pwaCanvas");
+  const ctx = canvas.getContext("2d");
+
+  // 1. Preenche o fundo quadrado com o azul oficial
+  ctx.fillStyle = "#0B1F3A";
+  ctx.fillRect(0, 0, 512, 512);
+
+  // 2. Carrega a logo atual e centraliza sem esticar
+  const img = new Image();
+  img.src = "logo-a1.png";
+
+  img.onload = function() {
+    // Calcula o tamanho mantendo a proporção exata da logo
+    const margem = 40; // Espaço em volta
+    const larguraMaxima = 512 - (margem * 2);
+    const escala = larguraMaxima / img.width;
+    const alturaProporcional = img.height * escala;
+
+    // Posição centralizada
+    const x = margem;
+    const y = (512 - alturaProporcional) / 2;
+
+    ctx.drawImage(img, x, y, larguraMaxima, alturaProporcional);
+  };
+
+  function baixarIcone() {
+    const link = document.createElement("a");
+    link.download = "icon-512.png";
+    link.href = canvas.toDataURL("image/png");
+    link.click();
+  }
+</script>
+
+</body>
+</html>
