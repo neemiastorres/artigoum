@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Artigo Um | Tela Inicial e Orientações</title>
+<title>Artigo Um | Cadastro Geral Oficial</title>
 
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-512.png">
@@ -27,9 +27,9 @@ body{
   color:#333;
 }
 
-.container{
+.card{
   width:100%;
-  max-width:560px;
+  max-width:420px;
   background:#ffffff;
   border-radius:22px;
   box-shadow:0 12px 30px rgba(0,0,0,0.12);
@@ -42,7 +42,7 @@ body{
   display:flex;
   justify-content:center;
   align-items:center;
-  margin-bottom:20px;
+  margin-bottom:18px;
 }
 
 .logo{
@@ -54,93 +54,38 @@ body{
 
 h1{
   color:#0B1F3A;
-  font-size:28px;
+  font-size:30px;
   font-weight:700;
   margin-bottom:8px;
 }
 
 .subtitle{
   color:#555;
-  font-size:16px;
+  font-size:18px;
   font-weight:600;
   margin-bottom:24px;
 }
 
-.info-card{
-  background:#f8f9fb;
-  border:1px solid #e1e6ed;
-  border-radius:14px;
-  padding:20px;
-  text-align:left;
-  margin-bottom:24px;
-}
-
-.info-card h2{
-  color:#0B1F3A;
-  font-size:18px;
-  margin-bottom:12px;
-  display:flex;
-  align-items:center;
-  gap:8px;
-}
-
-.info-card p{
-  font-size:14px;
-  color:#555;
-  line-height:1.6;
-  margin-bottom:12px;
-}
-
-.info-card p:last-child{
-  margin-bottom:0;
-}
-
-.info-list{
-  list-style:none;
-  padding:0;
-  margin:12px 0;
-}
-
-.info-list li{
-  font-size:14px;
+p{
   color:#444;
+  font-size:15px;
   line-height:1.5;
-  margin-bottom:10px;
-  padding-left:20px;
-  position:relative;
-}
-
-.info-list li::before{
-  content:"•";
-  color:#0B1F3A;
-  font-weight:bold;
-  font-size:18px;
-  position:absolute;
-  left:0;
-  top:-2px;
-}
-
-.alert-box{
-  background:#eef4ff;
-  border-left:4px solid #0B1F3A;
-  padding:12px 16px;
-  border-radius:8px;
-  font-size:13px;
-  color:#0B1F3A;
-  font-weight:600;
-  margin-top:12px;
+  margin-bottom:16px;
+  text-align:center;
 }
 
 .btn{
   display:block;
   width:100%;
+  border:none;
+  cursor:pointer;
   text-decoration:none;
   color:#fff;
   font-size:17px;
   font-weight:700;
-  padding:16px;
+  padding:15px;
   border-radius:12px;
-  margin-bottom:14px;
+  margin-top:10px;
   transition:background .2s ease, transform .1s ease;
   text-align:center;
 }
@@ -157,18 +102,18 @@ h1{
   background:#6bc74a;
 }
 
-.btn-login{
+.btn-admin{
   background:#0B1F3A;
 }
 
-.btn-login:hover{
+.btn-admin:hover{
   background:#13305c;
 }
 
-.footer-info{
-  margin-top:20px;
+.footer{
+  margin-top:24px;
   font-size:12px;
-  color:#888;
+  color:#777;
   line-height:1.4;
 }
 </style>
@@ -176,43 +121,45 @@ h1{
 </head>
 <body>
 
-<div class="container">
+<div class="card">
 
   <div class="logo-container">
     <img src="logo-a1.png" alt="Logo Artigo Um" class="logo">
   </div>
 
   <h1>Artigo Um</h1>
-  <div class="subtitle">Sistema de Cadastro Geral Oficial</div>
 
-  <!-- Bloco com os textos informativos completos -->
-  <div class="info-card">
-    <h2>Informações Gerais</h2>
-    <p>Seja bem-vindo ao aplicativo oficial do <strong>Artigo Um</strong>. Esta plataforma foi desenvolvida para organizar e gerenciar os dados dos participantes e apoiadores de forma simples e segura.</p>
+  <div class="subtitle">Cadastro Geral Oficial</div>
 
-    <ul class="info-list">
-      <li><strong>Formulário de Cadastro:</strong> Destinado ao preenchimento dos seus dados pessoais, endereço e contato. O processo é rápido e não necessita de login.</li>
-      <li><strong>Funcionamento Offline:</strong> Caso você esteja sem conexão com a internet, seus dados serão salvos com segurança no dispositivo e poderão ser enviados assim que a conexão for reestabelecida.</li>
-      <li><strong>Área Administrativa:</strong> Acesso restrito e exclusivo para administradores e coordenadores autorizados realizarem a consulta e gestão dos cadastros.</li>
-    </ul>
+  <p>
+    Bem-vindo ao aplicativo oficial de cadastro do <strong>Artigo Um</strong>.
+  </p>
 
-    <div class="alert-box">
-      🔒 Seus dados estão protegidos de acordo com as diretrizes da Lei Geral de Proteção de Dados (LGPD).
-    </div>
-  </div>
+  <p>
+    Utilize este aplicativo para realizar seu cadastro e manter suas informações atualizadas,
+    em conformidade com as normas internas da organização e com a
+    <strong>Lei Geral de Proteção de Dados (LGPD)</strong>.
+  </p>
 
-  <!-- Botões de Ação e Navegação -->
-  <a href="cadastro.html" class="btn btn-cadastro">Fazer Novo Cadastro</a>
-  <a href="login.html" class="btn btn-login">Área Administrativa</a>
+  <a class="btn btn-cadastro"
+     href="cadastro.html"
+     target="_blank">
+    Iniciar Cadastro
+  </a>
 
-  <div class="footer-info">
-    Artigo Um — Todos os direitos reservados.<br>
-    Aplicativo Oficial otimizado para celulares e computadores.
+  <a class="btn btn-admin"
+     href="login.html">
+    Área Administrativa
+  </a>
+
+  <div class="footer">
+    Os dados informados serão tratados conforme a Lei Geral de Proteção de Dados (LGPD)
+    e utilizados exclusivamente para fins institucionais do Artigo Um.
   </div>
 
 </div>
 
-<!-- Registro do Service Worker (PWA) -->
+<!-- Suporte PWA (Instalação no celular) -->
 <script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
