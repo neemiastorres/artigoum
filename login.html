@@ -1,12 +1,9 @@
 <!DOCTYPE html>
-
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>Artigo Um | Login Administrativo</title>
-
   <meta name="theme-color" content="#0B1F3A">
 
   <style>
@@ -84,6 +81,11 @@
       border:1px solid #ccc;
       border-radius:10px;
       font-size:16px;
+      outline: none;
+    }
+
+    input:focus{
+      border-color: #0B1F3A;
     }
 
     .btn{
@@ -106,6 +108,11 @@
       background:#13305c;
     }
 
+    .btn:disabled{
+      background:#8a97a8;
+      cursor:not-allowed;
+    }
+
     .btn-voltar{
       display:block;
       margin-top:18px;
@@ -122,7 +129,6 @@
       min-height:22px;
     }
   </style>
-
 </head>
 
 <body>
@@ -136,54 +142,66 @@
   <h1>Área Administrativa</h1>
   <div class="subtitle">Acesso restrito a administradores e coordenadores</div>
 
-  <div class="field">
-    <label for="email">E-mail</label>
-    <input type="email" id="email" placeholder="admin@artigoum.org">
-  </div>
+  <form id="loginForm" onsubmit="entrar(event)">
+    <div class="field">
+      <label for="email">E-mail</label>
+      <input type="email" id="email" placeholder="admin@artigoum.org" required autocomplete="username">
+    </div>
 
-  <div class="field">
-    <label for="senha">Senha</label>
-    <input type="password" id="senha" placeholder="Sua senha">
-  </div>
+    <div class="field">
+      <label for="senha">Senha</label>
+      <input type="password" id="senha" placeholder="Sua senha" required autocomplete="current-password">
+    </div>
 
-<button class="btn" onclick="entrar()">Entrar</button>
+    <button type="submit" class="btn" id="btnEntrar">Entrar</button>
+  </form>
 
   <div class="mensagem" id="mensagem"></div>
 
-<a class="btn-voltar" href="index.html">Voltar ao aplicativo</a>
+  <a class="btn-voltar" href="index.html">Voltar ao aplicativo</a>
 
 </div>
 
 <script>
-
 const API_URL = "https://script.google.com/macros/s/AKfycbxcFcKBO39I7UibZoFiPz3a1TZIpXtN5kGK0XnFJu-P-yfMhpCcGCMZIE2LmGtnD-qFqw/exec";
 
-async function entrar(){
+async function entrar(event){
+  if(event) event.preventDefault();
 
-  const email = document.getElementById("email").value.trim();
-  const senha = document.getElementById("senha").value.trim();
+  const emailInput = document.getElementById("email");
+  const senhaInput = document.getElementById("senha");
+  const btnEntrar = document.getElementById("btnEntrar");
+  const msgEl = document.getElementById("mensagem");
+
+  const email = emailInput.value.trim();
+  const senha = senhaInput.value.trim();
+
+  msgEl.innerText = "";
 
   if(email === "" || senha === ""){
-
-    document.getElementById("mensagem").innerText =
-      "Informe e-mail e senha.";
-
+    msgEl.innerText = "Informe e-mail e senha.";
     return;
-
   }
 
-  try{
+  // Desabilita o botão para evitar requisições duplicadas
+  btnEntrar.disabled = true;
+  btnEntrar.innerText = "Entrando...";
 
-    const url =
-      API_URL +
-      "?login=1&email=" + encodeURIComponent(email) +
-      "&senha=" + encodeURIComponent(senha);
+  try {
+    const url = `${API_URL}?login=1&email=${encodeURIComponent(email)}&senha=${encodeURIComponent(senha)}`;
 
-    const resposta = await fetch(url);
+    const resposta = await fetch(url, {
+      method: "GET",
+      redirect: "follow"
+    });
+
+    if (!resposta.ok) {
+      throw new Error(`Erro na rede: ${resposta.status}`);
+    }
+
     const dados = await resposta.json();
 
     if(dados.status === "ok"){
-
       localStorage.setItem("usuarioLogado", JSON.stringify({
         email: email,
         perfil: dados.perfil,
@@ -191,31 +209,19 @@ async function entrar(){
       }));
 
       window.location.href = "painel.html";
-
-    }else{
-
-      document.getElementById("mensagem").innerText =
-        "Usuário ou senha inválidos.";
-
+    } else {
+      msgEl.innerText = dados.mensagem || "Usuário ou senha inválidos.";
     }
 
-  }catch(e){
-
-    document.getElementById("mensagem").innerText =
-      "Erro ao conectar com o servidor.";
-
+  } catch(e) {
+    console.error("Erro de Autenticação:", e);
+    msgEl.innerText = "Erro ao conectar com o servidor. Tente novamente.";
+  } finally {
+    // Reabilita o botão se não tiver redirecionado
+    btnEntrar.disabled = false;
+    btnEntrar.innerText = "Entrar";
   }
-
 }
-
-document.getElementById("senha").addEventListener("keydown", function(event){
-
-  if(event.key === "Enter"){
-    entrar();
-  }
-
-});
-
 </script>
 
 </body>
